@@ -4,6 +4,7 @@
 #
 
 import psycopg2
+from random import shuffle
 
 
 def connect():
@@ -110,5 +111,32 @@ def swissPairings():
         id2: the second player's unique id
         name2: the second player's name
     """
+    # Get a count of the number of matches played.
+    tour_db = connect()
+    cur = tour_db.cursor()
+    cur.execute("SELECT COUNT(*) FROM matches;")
+    total_num_matches = cur.fetchone()[0]
+    tour_db.close()
+    print total_num_matches
+    # Get the current player standings
+    standings = playerStandings()
 
+    # If number of matches is zero, then need a random pairing for the 1st round
+    if total_num_matches == 0:
+        # Randomly shuffle the standings in place.
+        shuffle(standings)
 
+    # Otherwise pair up according to the number of wins.
+    # The standings are ordered by number of wins so just go down the list,
+    # two at a time.
+    pairings = []
+    standings_it = iter(standings)
+    for home_player in standings_it:
+        away_player = next(standings_it)
+        pairings.append((home_player[0], home_player[1], away_player[0], away_player[1]))
+
+    return pairings
+
+    # Credits
+    # Idea for using an iterator to go through a list two items at a time was found
+    # on this Stack Overflow page: http://stackoverflow.com/questions/16789776/
