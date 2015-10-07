@@ -14,29 +14,29 @@ def connect():
 
 def deleteMatches():
     """Remove all the match records from the database."""
-    db = connect()
-    cur = db.cursor()
+    tour_db = connect()
+    cur = tour_db.cursor()
     cur.execute("DELETE FROM matches;")
-    db.commit()
-    db.close()
+    tour_db.commit()
+    tour_db.close()
 
 
 def deletePlayers():
     """Remove all the player records from the database."""
-    db = connect()
-    cur = db.cursor()
+    tour_db = connect()
+    cur = tour_db.cursor()
     cur.execute("DELETE FROM players;")
-    db.commit()
-    db.close()
+    tour_db.commit()
+    tour_db.close()
 
 
 def countPlayers():
     """Returns the number of players currently registered."""
-    db = connect()
-    cur = db.cursor()
+    tour_db = connect()
+    cur = tour_db.cursor()
     cur.execute("SELECT COUNT(*) FROM players;")
     count = cur.fetchone()[0]
-    db.close()
+    tour_db.close()
     return count
 
 
@@ -49,11 +49,11 @@ def registerPlayer(name):
     Args:
       name: the player's full name (need not be unique).
     """
-    db = connect()
-    cur = db.cursor()
+    tour_db = connect()
+    cur = tour_db.cursor()
     cur.execute("INSERT INTO players (name) VALUES (%s);", (name,))
-    db.commit()
-    db.close()
+    tour_db.commit()
+    tour_db.close()
 
 
 def playerStandings():
@@ -117,7 +117,7 @@ def swissPairings():
     cur.execute("SELECT COUNT(*) FROM matches;")
     total_num_matches = cur.fetchone()[0]
     tour_db.close()
-    print total_num_matches
+
     # Get the current player standings
     standings = playerStandings()
 
