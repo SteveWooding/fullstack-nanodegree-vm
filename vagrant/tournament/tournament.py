@@ -4,6 +4,7 @@
 #
 
 import psycopg2
+import itertools
 from random import shuffle
 
 
