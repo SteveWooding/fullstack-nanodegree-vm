@@ -199,7 +199,7 @@ def swissPairings():
 
 
 def check_for_rematch(player_id1, player_id2):
-    """Checks whether the two players specificed have played a match before.
+    """Checks whether the two players specified have played a match before.
 
     Args:
       player_id1: ID of first player
@@ -259,15 +259,15 @@ def generate_pairings(win_groups):
             name2: the second player's name
 
         idx (int): If no non-repeated match ups could be found, this tells the calling
-            function which win group the issue is in so it can be resovled.
+            function which win group the issue is in so it can be resolved.
     """
     # For each win group, try each combination of matches, checking for rematches.
     pairings = []
     for idx, win_group in enumerate(win_groups):
         win_group_success = False
-        # Go through each pair in the win group, checking for remathches.
+        # Go through each pair in the win group, checking for rematches.
         for pairs in all_pairs(win_group):
-            # Go through each pair in the win group, checking for remathches.
+            # Go through each pair in the win group, checking for rematches.
             contains_rematch = False
             for pair in pairs:
                 is_rematch = check_for_rematch(pair[0], pair[1])
@@ -301,7 +301,7 @@ def all_pairs(lst):
     The order of the pairs is not important and the ordering of each pair is not important.
     The list must be of even length.
 
-    This function was written by gatoatigrado (Stack Overflow username) and the orginal can
+    This function was written by gatoatigrado (Stack Overflow username) and the original can
     be found here: http://stackoverflow.com/a/13020502
 
     I have used this function as it precisely gives me what I wanted, without producing
@@ -311,7 +311,7 @@ def all_pairs(lst):
         lst (list): a list of items to be paired up
 
     Yields:
-        list: The next set of pairs. Each pair consists of items from the orginal list placed
+        list: The next set of pairs. Each pair consists of items from the original list placed
             within a tuple.
 
     Example:
@@ -350,7 +350,7 @@ def all_pairs(lst):
     if list_length % 2 != 0:
         raise ValueError("The list must have an even number of items.")
 
-    # Create an iterater that goes through all the choices of which item to pair up next.
+    # Create an iterator that goes through all the choices of which item to pair up next.
     choice_indices = itertools.product(*[xrange(k) for k in reversed(xrange(1, list_length, 2))])
 
     # Generate a list of pairs for each choice
@@ -368,9 +368,9 @@ def all_pairs(lst):
 
 
 def move_item_to_list(list_of_lists, target_list_idx):
-    """Takes a list of lists and moves one item to the list specificed from the next list.
+    """Takes a list of lists and moves one item to the list specified from the next list.
 
-    This function works inplace upon the list of lists.
+    This function works in-place upon the list of lists.
 
     Args:
         list_of_lists (list): A list of lists.
