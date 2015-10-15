@@ -78,8 +78,13 @@ vagrant halt
 ```
 
 ## Extra Credit Description
-No extra credit features have been implemented as of yet.
+The Swiss-system algorithm avoids rematches between players during a tournament.
 
 ## Miscellaneous
 This README document is based on a template suggested by PhilipCoach in this
 Udacity forum [post](https://discussions.udacity.com/t/readme-files-in-project-1/23524).
+
+The function all_pairs() was written by gatoatigrado (Stack Overflow username) and
+the original can be found [here](http://stackoverflow.com/a/13020502). I have explained
+how this function works and why it is needed in the docstring for the function. I have
+also added comments to the code.
