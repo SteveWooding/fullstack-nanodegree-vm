@@ -125,6 +125,73 @@ def testPairings():
     print "8. After one match, players with one win are paired."
 
 
+def testAvoidRematches():
+    deleteMatches()
+    deletePlayers()
+    registerPlayer("Alice")    # ids[0]
+    registerPlayer("Bob")      # ids[1]
+    registerPlayer("Clive")    # ids[2]
+    registerPlayer("Dave")     # ids[3]
+    registerPlayer("Evan")     # ids[4]
+    registerPlayer("Frank")    # ids[5]
+    registerPlayer("Geo")      # ids[6]
+    registerPlayer("Hank")     # ids[7]
+    registerPlayer("Indingo")  # ids[8]
+    registerPlayer("Jim")      # ids[9]
+    registerPlayer("Kim")      # ids[10]
+    registerPlayer("Lin")      # ids[11]
+    registerPlayer("Mather")   # ids[12]
+    registerPlayer("Nick")     # ids[13]
+    registerPlayer("Oscar")    # ids[14]
+    registerPlayer("Peter")    # ids[15]
+    standings = playerStandings()
+    ids = [row[0] for row in standings]
+
+    # First round matches
+    reportMatch(ids[6], ids[13])
+    reportMatch(ids[8], ids[14])
+    reportMatch(ids[15], ids[2])
+    reportMatch(ids[0], ids[10])
+    reportMatch(ids[12], ids[3])
+    reportMatch(ids[1], ids[7])
+    reportMatch(ids[5], ids[11])
+    reportMatch(ids[4], ids[9])
+
+    # Second round matches
+    reportMatch(ids[3], ids[7])
+    reportMatch(ids[14], ids[13])
+    reportMatch(ids[10], ids[9])
+    reportMatch(ids[2], ids[11])
+    reportMatch(ids[1], ids[4])
+    reportMatch(ids[12], ids[5])
+    reportMatch(ids[0], ids[6])
+    reportMatch(ids[15], ids[8])
+
+    # Third round matches
+    reportMatch(ids[11], ids[9])
+    reportMatch(ids[13], ids[7])
+    reportMatch(ids[5], ids[8])
+    reportMatch(ids[14], ids[4])
+    reportMatch(ids[6], ids[3])
+    reportMatch(ids[10], ids[2])
+    reportMatch(ids[1], ids[12])
+    reportMatch(ids[0], ids[15])
+
+    pairings = swissPairings()
+
+    is_rematch = False
+    for pair in pairings:
+        is_rematch = check_for_rematch(pair[0], pair[2])
+        if is_rematch is True:
+            break
+
+    if is_rematch is True:
+        raise ValueError(
+            "Pairings contained one or more rematches from previous rounds.")
+    print("9. Given a tournament that would have produced a rematch, swissPairings() avoided "
+          "any rematches.")
+
+
 if __name__ == '__main__':
     testDeleteMatches()
     testDelete()
@@ -134,6 +201,7 @@ if __name__ == '__main__':
     testStandingsBeforeMatches()
     testReportMatches()
     testPairings()
+    testAvoidRematches()
     print "Success!  All tests pass!"
 
 
