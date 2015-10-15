@@ -106,18 +106,20 @@ def swissPairings():
     to him or her in the standings.
 
     Returns:
-      A list of tuples, each of which contains (id1, name1, id2, name2)
-        id1: the first player's unique id
-        name1: the first player's name
-        id2: the second player's unique id
-        name2: the second player's name
+        A list of tuples, each of which contains (id1, name1, id2, name2)
+            id1: the first player's unique id
+            name1: the first player's name
+            id2: the second player's unique id
+            name2: the second player's name
     """
+    # Declare a list object to store the pairings.
+    pairings = []
+
     # Get a count of the number of matches played.
     tour_db = connect()
     cur = tour_db.cursor()
     cur.execute("SELECT COUNT(*) FROM matches;")
     total_num_matches = cur.fetchone()[0]
-    tour_db.close()
 
     # Get the current player standings
     standings = playerStandings()
@@ -127,20 +129,74 @@ def swissPairings():
         # Randomly shuffle the standings in place.
         shuffle(standings)
 
-    # Otherwise pair up according to the number of wins.
-    # The standings are ordered by number of wins so just go down the list,
-    # two at a time.
-    pairings = []
-    standings_it = iter(standings)
-    for home_player in standings_it:
-        away_player = next(standings_it)
-        pairings.append((home_player[0], home_player[1], away_player[0], away_player[1]))
+        # Go through standings two at a time and generate the pairings [1].
+        standings_it = iter(standings)
+        for home_player in standings_it:
+            away_player = next(standings_it)
+            pairings.append((home_player[0], home_player[1], away_player[0], away_player[1]))
+
+        tour_db.close()
+        return pairings
+
+    # Check to see if all players have played the same number of matches.
+    cur.execute("SELECT MAX(num_matches) FROM num_matches;")
+    max_num_matches = cur.fetchone()[0]
+    cur.execute("SELECT MIN(num_matches) FROM num_matches;")
+    min_num_matches = cur.fetchone()[0]
+
+    if max_num_matches != min_num_matches:
+        tour_db.close()
+        print "Incomplete previous round. Please report more matches."
+        return None
+
+    # Compile a list of win groupings
+    max_num_wins = standings[0][2]
+    win_groups = []
+    for wins in xrange(0, max_num_wins + 1):
+        cur.execute("SELECT id FROM num_wins WHERE wins=%s", (wins,))
+        res = [int(row[0]) for row in cur.fetchall()]
+        win_groups.append(res)
+
+    # Finished with the database in this function, so let's be nice and close it.
+    tour_db.close()
+
+    # If only 1 player in the top win group, then we have an overall winner, so
+    # no need to have another round of pairings.
+    if len(win_groups[-1:][0]) == 1:
+        print "An overall winner already exists. No further round required."
+        return None
+
+    # Check to see if any of the win groups contains an odd number of players.
+    for i in xrange(0, len(win_groups)):
+        if len(win_groups[i]) % 2 != 0:
+            move_item_to_list(win_groups, i)
+
+    # Generate pairings until no rematches exist in the pairings
+    pairing_success = False
+    while pairing_success is False:
+        pairings, error_in_group = generate_pairings(win_groups)
+        if error_in_group is None:
+            # Found valid pairings, so exist the while loop.
+            pairing_success = True
+
+        else:
+            # Could not find non-repeated matches in a win group.
+            if error_in_group + 2 > len(win_groups):
+                print "Error: Can't find a set of pairings with no repeats."
+                return None
+
+            # Add two players from the next group to the erroring group.
+            move_item_to_list(win_groups, error_in_group)
+            move_item_to_list(win_groups, error_in_group)
+
+            # Go around the loop again and try to generate valid pairings
 
     return pairings
 
     # Credits
-    # Idea for using an iterator to go through a list two items at a time was found
+    # [1] Idea for using an iterator to go through a list two items at a time was found
     # on this Stack Overflow page: http://stackoverflow.com/questions/16789776/
+
 
 def check_for_rematch(player_id1, player_id2):
     """Checks whether the two players specificed have played a match before.
