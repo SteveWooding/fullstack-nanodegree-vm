@@ -187,6 +187,58 @@ def id_to_name(player_id):
     return player_name
 
 
+def generate_pairings(win_groups):
+    """Generates pairings given player IDs sorted into win groups.
+
+    Args:
+        win_groups (list): A list where each item is a list of player ids with the same
+            number of wins (though this may be adjusted if no non-repeated match ups could
+            found previously).
+
+    Returns:
+        pairings (list): A list of tuples, each of which contains (id1, name1, id2, name2)
+            id1: the first player's unique id
+            name1: the first player's name
+            id2: the second player's unique id
+            name2: the second player's name
+
+        idx (int): If no non-repeated match ups could be found, this tells the calling
+            function which win group the issue is in so it can be resovled.
+    """
+    # For each win group, try each combination of matches, checking for rematches.
+    pairings = []
+    for idx, win_group in enumerate(win_groups):
+        win_group_success = False
+        # Go through each pair in the win group, checking for remathches.
+        for pairs in all_pairs(win_group):
+            # Go through each pair in the win group, checking for remathches.
+            contains_rematch = False
+            for pair in pairs:
+                is_rematch = check_for_rematch(pair[0], pair[1])
+                if is_rematch is True:
+                    contains_rematch = True
+                    break
+
+            if contains_rematch is True:
+                # This set of pairs contains a rematch. Try the next pairing permutation.
+                continue
+            else:
+                win_group_success = True
+                for pair in pairs:
+                    # Add this pairing to the pairings
+                    player1_name = id_to_name(pair[0])
+                    player2_name = id_to_name(pair[1])
+                    pairings.append((pair[0], player1_name, pair[1], player2_name))
+                break
+
+        # If there was no success on any pair permutation, return to swissPairings()
+        # to adjust the groupings.
+        if win_group_success is False:
+            return None, idx
+
+    return pairings, None
+
+
 def all_pairs(lst):
     """Takes a list and generates all the unique pairs it contains.
 
