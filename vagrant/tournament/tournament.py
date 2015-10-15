@@ -140,3 +140,30 @@ def swissPairings():
     # Credits
     # Idea for using an iterator to go through a list two items at a time was found
     # on this Stack Overflow page: http://stackoverflow.com/questions/16789776/
+
+def check_for_rematch(player_id1, player_id2):
+    """Checks whether the two players specificed have played a match before.
+
+    Args:
+      player_id1: ID of first player
+      player_id2: ID of second player
+
+    Returns:
+      Bool: True if they have met before, False if they have not.
+    """
+    tour_db = connect()
+    cur = tour_db.cursor()
+    cur.execute("""SELECT EXISTS(SELECT 1
+                                 FROM matches
+                                 WHERE winner_pid=%(id1)s AND loser_pid=%(id2)s
+                                   OR   winner_pid=%(id2)s AND loser_pid=%(id1)s);""",
+                {'id1': player_id1, 'id2': player_id2})
+    is_rematch = cur.fetchone()[0]
+    tour_db.close()
+
+    return is_rematch
+
+    # Credits
+    # Idea for using the EXISTS PSQL keyword found on this Stack Overflow page:
+    # http://stackoverflow.com/questions/7471625/
+
