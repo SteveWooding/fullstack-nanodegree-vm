@@ -185,3 +185,75 @@ def id_to_name(player_id):
 
     return player_name
 
+
+def all_pairs(lst):
+    """Takes a list and generates all the unique pairs it contains.
+
+    The order of the pairs is not important and the ordering of each pair is not important.
+    The list must be of even length.
+
+    This function was written by gatoatigrado (Stack Overflow username) and the orginal can
+    be found here: http://stackoverflow.com/a/13020502
+
+    I have used this function as it precisely gives me what I wanted, without producing
+    excessive repeated pairings for this application.
+
+    Args:
+        lst (list): a list of items to be paired up
+
+    Yields:
+        list: The next set of pairs. Each pair consists of items from the orginal list placed
+            within a tuple.
+
+    Example:
+        Here is an example of the output for a list of 4 items.
+
+        >>> for pairs in all_pairs([1, 2, 3, 4]):
+                print pairs
+        [(1, 2), (3, 4)]
+        [(1, 3), (2, 4)]
+        [(1, 4), (2, 3)]
+
+        For a list of 4 items, the argument to the itertools.product() function is:
+            [0, 1, 2], [0]
+
+        Which will produce the following output from the product() function:
+            (0, 0)
+            (1, 0)
+            (2, 0)
+
+        So these results mean there will be 3 sets of pairs containing 2 pairs each.
+
+        For the first set (0, 0), the pop function is always pop(0) - taking the first
+        item off the temp list. So this just produces two pairs in the same order as per
+        the original list.
+
+        For set (1, 0), the first pair is (1, 3), as the first item of the first pair is
+        always the first item from the original list and the 1 means an item is skipped
+        and 3 is selected. The second pair is just what is left, (2, 4).
+
+        For set (2, 0), 2 items are skipped, so the first pair is (1, 4). Then what's left is
+        (2, 3) for the 2nd pair.
+
+    """
+    # Check to make sure there are an even number of items in the list.
+    list_length = len(lst)
+    if list_length % 2 != 0:
+        raise ValueError("The list must have an even number of items.")
+
+    # Create an iterater that goes through all the choices of which item to pair up next.
+    choice_indices = itertools.product(*[xrange(k) for k in reversed(xrange(1, list_length, 2))])
+
+    # Generate a list of pairs for each choice
+    for choice in choice_indices:
+        # Create a temporary copy of the list, so it can be consumed by calls to pop().
+        tmp = lst[:]
+        result = []
+
+        # Go through this choice of indices, consuming the temp list two items at a time
+        # creating pairs and creating the set of pairs in result.
+        for index in choice:
+            result.append((tmp.pop(0), tmp.pop(index)))
+
+        yield result
+
