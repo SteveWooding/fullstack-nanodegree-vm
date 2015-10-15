@@ -167,3 +167,21 @@ def check_for_rematch(player_id1, player_id2):
     # Idea for using the EXISTS PSQL keyword found on this Stack Overflow page:
     # http://stackoverflow.com/questions/7471625/
 
+
+def id_to_name(player_id):
+    """Returns a player's name based on a given ID number.
+
+    Args:
+      player_id: ID of player
+
+    Returns:
+      Str: Player's name.
+    """
+    tour_db = connect()
+    cur = tour_db.cursor()
+    cur.execute("SELECT name FROM players WHERE id=%s", (player_id,))
+    player_name = cur.fetchone()[0]
+    tour_db.close()
+
+    return player_name
+
