@@ -258,3 +258,28 @@ def all_pairs(lst):
 
         yield result
 
+
+def move_item_to_list(list_of_lists, target_list_idx):
+    """Takes a list of lists and moves one item to the list specificed from the next list.
+
+    This function works inplace upon the list of lists.
+
+    Args:
+        list_of_lists (list): A list of lists.
+        target_list_idx (int): Index of the list that will have an item moved to it.
+
+    Returns:
+        None: The list is modified in place.
+    """
+    # Check to see if the next list exists
+    if target_list_idx + 2 > len(list_of_lists):
+        raise IndexError("No list to move an item from exists.")
+
+    # Add an element from the next group to the group specified in the arguments
+    list_of_lists[target_list_idx].append(list_of_lists[target_list_idx + 1].pop(0))
+
+    # Check to see if the above operation created an empty group. If so then remove it.
+    if len(list_of_lists[target_list_idx + 1]) == 0:
+        del list_of_lists[target_list_idx + 1]
+
+    return None
