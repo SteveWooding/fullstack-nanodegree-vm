@@ -17,7 +17,8 @@ CREATE DATABASE tournament;
 
 -- Table containing the registered players, id and name.
 CREATE TABLE players ( id serial PRIMARY KEY,
-                       name text);
+                       name text,
+                       had_bye boolean);
 
 -- Table of matchers played, each row having the winner and loser ids.
 CREATE TABLE matches ( winner_pid int references players(id),
