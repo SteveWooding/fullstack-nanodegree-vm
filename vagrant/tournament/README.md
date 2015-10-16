@@ -54,13 +54,28 @@ vagrant ssh
 More detailed instructions for installing the Vagrant VM can be found
 [here](https://www.udacity.com/wiki/ud197/install-vagrant).
 
-### Running the tournament unit tests
+### Make sure you're in the right place
 Once inside the VM, navigate to the tournament directory with this command:
 
 ```bash
 cd /vagrant/tournament
 ```
 
+### Initialise the database
+On the first time you go through these instructions, you need to initialise
+the database with the following command:
+
+```bash
+psql -c '\i tournament.sql'
+```
+
+On later readings you can leave this step out, unless you have deleted the
+VM in the mean time. Then by all means, do this step again.
+
+It doesn't really hurt to do this step again, but it does delete the database and
+recreates it from scratch.
+
+### Running the tournament unit tests
 You can then run the unit tests for the project with the following command:
 
 ```bash
