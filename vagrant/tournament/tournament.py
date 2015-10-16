@@ -83,15 +83,33 @@ def playerStandings():
     return standings
 
 
-def reportMatch(winner, loser):
+def reportMatch(winner, loser=None):
     """Records the outcome of a single match between two players.
+    
+    If only one player ID is given, this indicates that a bye is to be given to
+    that player. A null is recorded in the loser_pid column of the matches table.
 
     Args:
-      winner:  the id number of the player who won
-      loser:  the id number of the player who lost
+        winner (int):  the id number of the player who won
+        loser (int) [optional]:  the id number of the player who lost
     """
     tour_db = connect()
     cur = tour_db.cursor()
+    
+    if loser is None:
+        # So a bye is to be given to player `winner`.
+        # Check to see whether player `winner` has be give a bye before.
+        cur.execute("SELECT had_bye FROM players WHERE id=%s", (winner,))
+        had_bye = cur.fetchone()[0]
+        
+        if had_bye is True:
+            print "Error: Player has already had a bye."
+            tour_db.close()
+            return
+        
+        # Update the had_bye attribute of the player.
+        cur.execute("UPDATE players SET had_bye=TRUE WHERE id=%s", (winner,))
+    
     cur.execute("INSERT INTO matches (winner_pid, loser_pid) VALUES (%s, %s);", (winner, loser))
     tour_db.commit()
     tour_db.close()
