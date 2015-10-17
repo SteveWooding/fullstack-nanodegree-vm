@@ -142,16 +142,30 @@ def swissPairings():
     # Get the current player standings
     standings = playerStandings()
 
+    # Check to see if there are an odd number of players.
+    have_odd_players = False
+    if len(standings) % 2 != 0:
+        have_odd_players = True
+
     # If number of matches is zero, then need a random pairing for the 1st round
     if total_num_matches == 0:
         # Randomly shuffle the standings in place.
         shuffle(standings)
 
+        # If we have an odd number of players, we need to deal with a bye for a player.
+        # Let's keep track of that.
+        if have_odd_players is True:
+            dealt_with_bye = False
+
         # Go through standings two at a time and generate the pairings [1].
         standings_it = iter(standings)
         for home_player in standings_it:
-            away_player = next(standings_it)
-            pairings.append((home_player[0], home_player[1], away_player[0], away_player[1]))
+            if have_odd_players is True and dealt_with_bye is False:
+                pairings.append((home_player[0], home_player[1], home_player[0], 'Give a Bye'))
+                dealt_with_bye = True
+            else:
+                away_player = next(standings_it)
+                pairings.append((home_player[0], home_player[1], away_player[0], away_player[1]))
 
         tour_db.close()
         return pairings
@@ -184,6 +198,21 @@ def swissPairings():
         print "An overall winner already exists. No further round required."
         return None
 
+    # Deal with giving a player a bye.
+    if have_odd_players is True:
+        # Get a player that hasn't alreay taken a bye.
+        bye_player_id = select_player_for_bye()
+
+        # Remove this player from the win groups.
+        for win_group in win_groups:
+            if win_group.count(bye_player_id) > 0:
+                win_group.remove(bye_player_id)
+                break
+
+        # Add this bye match to the pairings.
+        bye_player_name = id_to_name(bye_player_id)
+        pairings.append((bye_player_id, bye_player_name, bye_player_id, 'Give a Bye'))
+
     # Check to see if any of the win groups contains an odd number of players.
     for i in xrange(0, len(win_groups)):
         if len(win_groups[i]) % 2 != 0:
@@ -192,7 +221,7 @@ def swissPairings():
     # Generate pairings until no rematches exist in the pairings
     pairing_success = False
     while pairing_success is False:
-        pairings, error_in_group = generate_pairings(win_groups)
+        pairings_res, error_in_group = generate_pairings(win_groups)
         if error_in_group is None:
             # Found valid pairings, so exist the while loop.
             pairing_success = True
@@ -207,7 +236,10 @@ def swissPairings():
             move_item_to_list(win_groups, error_in_group)
             move_item_to_list(win_groups, error_in_group)
 
-            # Go around the loop again and try to generate valid pairings
+        # Go around the loop again and try to generate valid pairings
+
+    # Add the pairings result from generate_pairings() to pairings.
+    pairings.extend(pairings_res)
 
     return pairings
 
