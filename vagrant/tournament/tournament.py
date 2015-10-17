@@ -409,3 +409,25 @@ def move_item_to_list(list_of_lists, target_list_idx):
         del list_of_lists[target_list_idx + 1]
 
     return None
+
+
+def select_player_for_bye():
+    """Returns a player id of a player that hasn't already taken a bye.
+
+    The query to the database makes sure to return the player with the fewest number
+    of wins, to avoid a situation where one of the top players wins the tournament
+    with a bye.
+
+    Returns:
+        non_bye_player_id (int): The player id of a player that hasn't taken a bye.
+    """
+    tour_db = connect()
+    cur = tour_db.cursor()
+    cur.execute("""SELECT players.id
+                   FROM players, num_wins
+                   WHERE players.had_bye=FALSE and players.id = num_wins.id
+                   ORDER BY num_wins.wins;""")
+    non_bye_player_id = cur.fetchone()[0]
+    tour_db.close()
+
+    return non_bye_player_id
