@@ -142,11 +142,6 @@ def swissPairings():
     # Get the current player standings
     standings = playerStandings()
 
-    # Check to see if there are an odd number of players.
-    have_odd_players = False
-    if len(standings) % 2 != 0:
-        have_odd_players = True
-
     # If number of matches is zero, then need a random pairing for the 1st round
     if total_num_matches == 0:
         random_pairing(standings, pairings)
@@ -181,8 +176,8 @@ def swissPairings():
         print "An overall winner already exists. No further round required."
         return None
 
-    # Deal with giving a player a bye.
-    if have_odd_players is True:
+    # Deal with giving a player a bye, if there are an odd number of players.
+    if len(standings) % 2 != 0:
         # Get a player that hasn't alreay taken a bye.
         bye_player_id = select_player_for_bye()
 
