@@ -149,24 +149,7 @@ def swissPairings():
 
     # If number of matches is zero, then need a random pairing for the 1st round
     if total_num_matches == 0:
-        # Randomly shuffle the standings in place.
-        shuffle(standings)
-
-        # If we have an odd number of players, we need to deal with a bye for a player.
-        # Let's keep track of that.
-        if have_odd_players is True:
-            dealt_with_bye = False
-
-        # Go through standings two at a time and generate the pairings [1].
-        standings_it = iter(standings)
-        for home_player in standings_it:
-            if have_odd_players is True and dealt_with_bye is False:
-                pairings.append((home_player[0], home_player[1], home_player[0], 'Give a Bye'))
-                dealt_with_bye = True
-            else:
-                away_player = next(standings_it)
-                pairings.append((home_player[0], home_player[1], away_player[0], away_player[1]))
-
+        random_pairing(standings, pairings)
         tour_db.close()
         return pairings
 
@@ -463,3 +446,39 @@ def select_player_for_bye():
     tour_db.close()
 
     return non_bye_player_id
+
+
+def random_pairing(standings, pairings):
+    """Create random pairings for before any matches have been played.
+
+    Args:
+        standings (list): List of registered players.
+        pairings (list): List of pairings between players.
+
+    Returns:
+        Nothing: pairings is modified in place.
+    """
+    # Randomly shuffle the standings in place.
+    shuffle(standings)
+
+    # Check to see if there are an odd number of players.
+    have_odd_players = False
+    if len(standings) % 2 != 0:
+        have_odd_players = True
+
+    # If we have an odd number of players, we need to deal with a bye for a player.
+    # Let's keep track of that.
+    if have_odd_players is True:
+        dealt_with_bye = False
+
+    # Go through standings two at a time and generate the pairings [1].
+    standings_it = iter(standings)
+    for home_player in standings_it:
+        if have_odd_players is True and dealt_with_bye is False:
+            pairings.append((home_player[0], home_player[1], home_player[0], 'Give a Bye'))
+            dealt_with_bye = True
+        else:
+            away_player = next(standings_it)
+            pairings.append((home_player[0], home_player[1], away_player[0], away_player[1]))
+
+    return
