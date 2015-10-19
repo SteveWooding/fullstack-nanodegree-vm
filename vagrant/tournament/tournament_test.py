@@ -188,8 +188,38 @@ def testAvoidRematches():
     if is_rematch is True:
         raise ValueError(
             "Pairings contained one or more rematches from previous rounds.")
-    print("9. Given a tournament that would have produced a rematch, swissPairings() avoided "
-          "any rematches.")
+    print("9. Given a tournament that would have produced a rematch, "
+          "swissPairings() avoided any rematches.")
+
+
+def testOddNumPlayers():
+    deleteMatches()
+    deletePlayers()
+    registerPlayer("Alice")    # ids[0]
+    registerPlayer("Bob")      # ids[1]
+    registerPlayer("Clive")    # ids[2]
+    registerPlayer("Dave")     # ids[3]
+    registerPlayer("Evan")     # ids[4]
+
+    standings = playerStandings()
+    ids = [row[0] for row in standings]
+
+    pairings = swissPairings()
+    if pairings[0][0] != pairings[0][2] and pairings[0][3] != 'Give a Bye':
+        raise ValueError(
+            "First paring should be a bye with odd number of players.")
+
+    reportMatch(ids[0])  # Give Alice a Bye
+    reportMatch(ids[4], ids[1])
+    reportMatch(ids[3], ids[2])
+
+    pairings = swissPairings()
+    if pairings[0][0] != pairings[0][2] and pairings[0][3] != 'Give a Bye':
+        raise ValueError(
+            "First paring should be a bye with odd number of players.")
+
+    print("10. Given an odd number of players, a bye should be given "
+          "to a player.")
 
 
 if __name__ == '__main__':
@@ -202,6 +232,7 @@ if __name__ == '__main__':
     testReportMatches()
     testPairings()
     testAvoidRematches()
+    testOddNumPlayers()
     print "Success!  All tests pass!"
 
 
