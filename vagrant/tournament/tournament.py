@@ -133,41 +133,31 @@ def swissPairings():
     # Declare a list object to store the pairings.
     pairings = []
 
-    # Get a count of the number of matches played.
-    tour_db = connect()
-    cur = tour_db.cursor()
-    cur.execute("SELECT COUNT(*) FROM matches;")
-    total_num_matches = cur.fetchone()[0]
-
     # Get the current player standings
     standings = playerStandings()
 
+    # Extract the number of matches played by each player.
+    matches = [player[3] for player in standings]
+
     # If number of matches is zero, then need a random pairing for the 1st round
-    if total_num_matches == 0:
+    if sum(matches) == 0:
         random_pairing(standings, pairings)
-        tour_db.close()
         return pairings
 
     # Check to see if all players have played the same number of matches.
-    cur.execute("SELECT MAX(num_matches) FROM num_matches;")
-    max_num_matches = cur.fetchone()[0]
-    cur.execute("SELECT MIN(num_matches) FROM num_matches;")
-    min_num_matches = cur.fetchone()[0]
-
-    if max_num_matches != min_num_matches:
-        tour_db.close()
+    if max(matches) != min(matches):
         print "Incomplete previous round. Please report more matches."
         return None
 
     # Compile a list of win groupings
     max_num_wins = standings[0][2]
     win_groups = []
+    tour_db = connect()
+    cur = tour_db.cursor()
     for wins in xrange(0, max_num_wins + 1):
         cur.execute("SELECT id FROM num_wins WHERE wins=%s", (wins,))
         res = [int(row[0]) for row in cur.fetchall()]
         win_groups.append(res)
-
-    # Finished with the database in this function, so let's be nice and close it.
     tour_db.close()
 
     # If only 1 player in the top win group, then we have an overall winner, so
