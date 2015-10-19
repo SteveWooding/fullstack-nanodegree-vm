@@ -178,7 +178,7 @@ def swissPairings():
 
     # Deal with giving a player a bye, if there are an odd number of players.
     if len(standings) % 2 != 0:
-        # Get a player that hasn't alreay taken a bye.
+        # Get a player that hasn't already taken a bye.
         bye_player_id = select_player_for_bye()
 
         # Remove this player from the win groups.
