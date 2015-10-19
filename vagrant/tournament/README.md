@@ -95,6 +95,9 @@ vagrant halt
 ## Extra Credit Description
 The Swiss-system algorithm avoids rematches between players during a tournament.
 
+An odd number of players in a tournament is handled by given one player per round a
+bye (a free win). A player can only get a bye once in a tournament.
+
 ## Miscellaneous
 This README document is based on a template suggested by PhilipCoach in this
 Udacity forum [post](https://discussions.udacity.com/t/readme-files-in-project-1/23524).
