@@ -8,36 +8,48 @@ import itertools
 from random import shuffle
 
 
-def connect():
+def connect(database_name="tournament"):
     """Connect to the PostgreSQL database.  Returns a database connection."""
-    return psycopg2.connect("dbname=tournament")
+    try:
+        database = psycopg2.connect("dbname={}".format(database_name))
+        cursor = database.cursor()
+        return database, cursor
+    except psycopg2.Error:
+        print "Could not connect to database %s.", database_name
 
 
 def deleteMatches():
     """Remove all the match records from the database."""
-    tour_db = connect()
-    cur = tour_db.cursor()
-    cur.execute("TRUNCATE matches;")
+    tour_db, cursor = connect()
+
+    query = "TRUNCATE matches;"
+    cursor.execute(query)
+
     tour_db.commit()
     tour_db.close()
 
 
 def deletePlayers():
     """Remove all the player records from the database."""
-    tour_db = connect()
-    cur = tour_db.cursor()
-    cur.execute("DELETE FROM players;")
+    tour_db, cursor = connect()
+
+    query = "DELETE FROM players;"
+    cursor.execute(query)
+
     tour_db.commit()
     tour_db.close()
 
 
 def countPlayers():
     """Returns the number of players currently registered."""
-    tour_db = connect()
-    cur = tour_db.cursor()
-    cur.execute("SELECT COUNT(*) FROM players;")
-    count = cur.fetchone()[0]
+    tour_db, cursor = connect()
+
+    query = "SELECT COUNT(*) FROM players;"
+    cursor.execute(query)
+    count = cursor.fetchone()[0]
+
     tour_db.close()
+
     return count
 
 
@@ -50,9 +62,12 @@ def registerPlayer(name):
     Args:
       name: the player's full name (need not be unique).
     """
-    tour_db = connect()
-    cur = tour_db.cursor()
-    cur.execute("INSERT INTO players (name) VALUES (%s);", (name,))
+    tour_db, cursor = connect()
+
+    query = "INSERT INTO players (name) VALUES (%s);"
+    parameter = (name,)
+    cursor.execute(query, parameter)
+
     tour_db.commit()
     tour_db.close()
 
@@ -70,16 +85,17 @@ def playerStandings():
         wins: the number of matches the player has won
         matches: the number of matches the player has played
     """
-    tour_db = connect()
-    cur = tour_db.cursor()
+    tour_db, cursor = connect()
+
     query = ("SELECT num_matches_wins.id, players.name, num_matches_wins.wins, "
              "       num_matches_wins.matches "
              "FROM players, num_matches_wins "
              "WHERE players.id = num_matches_wins.id "
              "ORDER BY num_matches_wins.wins desc;")
-    cur.execute(query)
+    cursor.execute(query)
     standings = [(int(row[0]), str(row[1]), int(row[2]), int(row[3]))
-                 for row in cur.fetchall()]
+                 for row in cursor.fetchall()]
+
     tour_db.close()
     return standings
 
@@ -95,14 +111,15 @@ def reportMatch(winner, loser=None):
         winner (int):  the id number of the player who won
         loser (int) [optional]:  the id number of the player who lost
     """
-    tour_db = connect()
-    cur = tour_db.cursor()
+    tour_db, cursor = connect()
 
     if loser is None:
         # So a bye is to be given to player `winner`.
         # Check to see whether player `winner` has be give a bye before.
-        cur.execute("SELECT had_bye FROM players WHERE id=%s", (winner,))
-        had_bye = cur.fetchone()[0]
+        query = "SELECT had_bye FROM players WHERE id=%s"
+        parameter = (winner,)
+        cursor.execute(query, parameter)
+        had_bye = cursor.fetchone()[0]
 
         if had_bye is True:
             print "Error: Player has already had a bye."
@@ -110,10 +127,13 @@ def reportMatch(winner, loser=None):
             return
 
         # Update the had_bye attribute of the player.
-        cur.execute("UPDATE players SET had_bye=TRUE WHERE id=%s", (winner,))
+        query = "UPDATE players SET had_bye=TRUE WHERE id=%s"
+        cursor.execute(query, parameter)
 
-    cur.execute("INSERT INTO matches (winner_pid, loser_pid) VALUES (%s, %s);",
-                (winner, loser))
+    query = "INSERT INTO matches (winner_pid, loser_pid) VALUES (%s, %s);"
+    parameter = (winner, loser)
+    cursor.execute(query, parameter)
+
     tour_db.commit()
     tour_db.close()
 
@@ -155,12 +175,15 @@ def swissPairings():
     # Compile a list of win groupings
     max_num_wins = standings[0][2]
     win_groups = []
-    tour_db = connect()
-    cur = tour_db.cursor()
+    tour_db, cursor = connect()
+
     for wins in xrange(0, max_num_wins + 1):
-        cur.execute("SELECT id FROM num_wins WHERE wins=%s", (wins,))
-        res = [int(row[0]) for row in cur.fetchall()]
+        query = "SELECT id FROM num_wins WHERE wins=%s"
+        parameter = (wins,)
+        cursor.execute(query, parameter)
+        res = [int(row[0]) for row in cursor.fetchall()]
         win_groups.append(res)
+
     tour_db.close()
 
     # If only 1 player in the top win group, then we have an overall winner, so
@@ -226,14 +249,16 @@ def check_for_rematch(player_id1, player_id2):
     Returns:
       Bool: True if they have met before, False if they have not.
     """
-    tour_db = connect()
-    cur = tour_db.cursor()
-    cur.execute("""SELECT EXISTS(SELECT 1
+    tour_db, cursor = connect()
+
+    query = """SELECT EXISTS(SELECT 1
                        FROM matches
                        WHERE winner_pid=%(id1)s AND loser_pid=%(id2)s
-                           OR winner_pid=%(id2)s AND loser_pid=%(id1)s);""",
-                {'id1': player_id1, 'id2': player_id2})
-    is_rematch = cur.fetchone()[0]
+                           OR winner_pid=%(id2)s AND loser_pid=%(id1)s);"""
+    parameter = {'id1': player_id1, 'id2': player_id2}
+    cursor.execute(query, parameter)
+    is_rematch = cursor.fetchone()[0]
+
     tour_db.close()
 
     return is_rematch
@@ -252,10 +277,13 @@ def id_to_name(player_id):
     Returns:
       Str: Player's name.
     """
-    tour_db = connect()
-    cur = tour_db.cursor()
-    cur.execute("SELECT name FROM players WHERE id=%s", (player_id,))
-    player_name = cur.fetchone()[0]
+    tour_db, cursor = connect()
+
+    query = "SELECT name FROM players WHERE id=%s"
+    parameter = (player_id,)
+    cursor.execute(query, parameter)
+    player_name = cursor.fetchone()[0]
+
     tour_db.close()
 
     return player_name
@@ -437,13 +465,15 @@ def select_player_for_bye():
         non_bye_player_id (int): The player id of a player that hasn't taken a
                                  bye.
     """
-    tour_db = connect()
-    cur = tour_db.cursor()
-    cur.execute("""SELECT players.id
-                   FROM players, num_wins
-                   WHERE players.had_bye=FALSE and players.id = num_wins.id
-                   ORDER BY num_wins.wins;""")
-    non_bye_player_id = cur.fetchone()[0]
+    tour_db, cursor = connect()
+
+    query = """SELECT players.id
+               FROM players, num_wins
+               WHERE players.had_bye=FALSE and players.id = num_wins.id
+               ORDER BY num_wins.wins;"""
+    cursor.execute(query)
+    non_bye_player_id = cursor.fetchone()[0]
+
     tour_db.close()
 
     return non_bye_player_id
