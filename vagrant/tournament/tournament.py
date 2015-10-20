@@ -17,7 +17,7 @@ def deleteMatches():
     """Remove all the match records from the database."""
     tour_db = connect()
     cur = tour_db.cursor()
-    cur.execute("DELETE FROM matches;")
+    cur.execute("TRUNCATE matches;")
     tour_db.commit()
     tour_db.close()
 
