@@ -2,6 +2,8 @@
 #
 # tournament.py -- implementation of a Swiss-system tournament
 #
+# Steven Wooding, October 2015
+#
 
 import psycopg2
 import itertools
