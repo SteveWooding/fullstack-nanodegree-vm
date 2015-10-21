@@ -1,3 +1,4 @@
+"""Database setup for the menu project."""
 import os
 import sys
 from sqlalchemy import Column, ForeignKey, Integer, String
@@ -8,12 +9,14 @@ from sqlalchemy import create_engine
 Base = declarative_base()
 
 class Restaurant(Base):
+    """Setup for a table of restaurants in the database."""
     __tablename__ = 'restaurant'
 
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
 
 class MenuItem(Base):
+    """Setup for a table of menu items in the database."""
     __tablename__ = 'menu_item'
 
     name = Column(String(80), nullable=False)
