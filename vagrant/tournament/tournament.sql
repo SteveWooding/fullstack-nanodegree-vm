@@ -21,7 +21,8 @@ CREATE TABLE players ( id serial PRIMARY KEY,
                        had_bye boolean DEFAULT FALSE);
 
 -- Table of matchers played, each row having the winner and loser ids.
-CREATE TABLE matches ( winner_pid int references players(id),
+CREATE TABLE matches ( id serial PRIMARY KEY,
+                       winner_pid int references players(id),
                        loser_pid int references players(id));
 
 -- View of the number of wins each player has achieved.
