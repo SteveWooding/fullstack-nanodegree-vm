@@ -39,3 +39,9 @@ for puppy in puppies:
 
 
 # 4. Query all puppies grouped by the shelter in which they are staying.
+puppies_by_shelter = (session.query(Puppy).
+                      order_by(Puppy.shelter_id).
+                      all())
+print
+for puppy in puppies_by_shelter:
+    print puppy.name, puppy.shelter.name
