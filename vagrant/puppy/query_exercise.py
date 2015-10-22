@@ -2,6 +2,8 @@
 """Perform queries of the database to complete excercise"""
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy import desc
+import datetime
 from database_setup import Base, Shelter, Puppy
 
 # Setup the connection to the database
@@ -19,7 +21,14 @@ for puppy in puppies:
 
 # 2. Query all of the puppies that are less than 6 months old organized by the
 #    youngest first.
-
+date_6_months_ago = datetime.date.today() - datetime.timedelta(days=182)
+young_puppies = (session.query(Puppy).
+                 filter(Puppy.date_of_birth > date_6_months_ago).
+                 order_by(desc(Puppy.date_of_birth)).
+                 all())
+print
+for puppy in young_puppies:
+    print puppy.name, puppy.date_of_birth
 
 
 # 3. Query all puppies by ascending weight.
