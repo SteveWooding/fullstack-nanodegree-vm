@@ -32,7 +32,10 @@ for puppy in young_puppies:
 
 
 # 3. Query all puppies by ascending weight.
-
+puppies = session.query(Puppy).order_by(Puppy.weight).all()
+print
+for puppy in puppies:
+    print puppy.name, puppy.weight
 
 
 # 4. Query all puppies grouped by the shelter in which they are staying.
