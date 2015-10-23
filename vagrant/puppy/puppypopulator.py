@@ -22,7 +22,8 @@ shelter1 = Shelter(name="Oakland Animal Services",
                    city="Oakland",
                    state="California",
                    zip_code="94601",
-                   website="oaklandanimalservices.org")
+                   website="oaklandanimalservices.org",
+                   max_capacity=34)
 session.add(shelter1)
 
 shelter2 = Shelter(name="San Francisco SPCA Mission Adoption Center",
@@ -30,7 +31,8 @@ shelter2 = Shelter(name="San Francisco SPCA Mission Adoption Center",
                    city="San Francisco",
                    state="California",
                    zip_code="94103",
-                   website="sfspca.org")
+                   website="sfspca.org",
+                   max_capacity=25)
 session.add(shelter2)
 
 shelter3 = Shelter(name="Wonder Dog Rescue",
@@ -38,7 +40,8 @@ shelter3 = Shelter(name="Wonder Dog Rescue",
                    city="San Francisco",
                    state="California",
                    zip_code="94103",
-                   website="http://wonderdogrescue.org")
+                   website="http://wonderdogrescue.org",
+                   max_capacity=33)
 session.add(shelter3)
 
 shelter4 = Shelter(name="Humane Society of Alameda",
@@ -46,7 +49,8 @@ shelter4 = Shelter(name="Humane Society of Alameda",
                    city="Alameda",
                    state="California",
                    zip_code="94501",
-                   website="hsalameda.org")
+                   website="hsalameda.org",
+                   max_capacity=42)
 session.add(shelter4)
 
 shelter5 = Shelter(name="Palo Alto Humane Society",
@@ -54,7 +58,8 @@ shelter5 = Shelter(name="Palo Alto Humane Society",
                    city="Menlo Park",
                    state="California",
                    zip_code="94025",
-                   website="paloaltohumane.org")
+                   website="paloaltohumane.org",
+                   max_capacity=21)
 session.add(shelter5)
 
 session.commit()
