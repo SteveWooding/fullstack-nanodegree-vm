@@ -19,7 +19,7 @@ class Shelter(Base):
     zip_code = Column(String(10))
     website = Column(String(100))
     max_capacity = Column(Integer, nullable=False)
-    current_occupancy = Column(Integer)
+    current_occupancy = Column(Integer, default=0)
 
 
 association_table = Table(
