@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """Setup a database of puppies and dog shelters"""
-from sqlalchemy import Column, ForeignKey, Integer, String, Date, Numeric
+from sqlalchemy import Table, Column, ForeignKey, Integer, String, Date, Numeric
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
@@ -18,6 +18,12 @@ class Shelter(Base):
     state = Column(String(50))
     zip_code = Column(String(10))
     website = Column(String(100))
+
+
+association_table = Table(
+    "association", Base.metadata,
+    Column("puppy_id", Integer, ForeignKey("puppy.id")),
+    Column("adopter_id", Integer, ForeignKey("adopter.id")))
 
 
 class Puppy(Base):
@@ -38,6 +44,12 @@ class Puppy(Base):
     # This is a one-to-one association.
     profile = relationship("Profile", uselist=False, backref="puppy")
 
+    # Each puppy can have one or more adopters.
+    # This is a many-to-many association.
+    adopters = relationship("Adopter",
+                            secondary=association_table,
+                            backref="puppies")
+
 
 class Profile(Base):
     """Setup for a puppy profile object.
@@ -53,6 +65,17 @@ class Profile(Base):
 
     puppy_id = Column(Integer, ForeignKey("puppy.id"))
 
+
+class Adopter(Base):
+    """Setup for an adopter object and table.
+
+    A puppy may be adopted by more than one person, or one person may adopt
+    many puppies, so this is a many-to-many relationship.
+    """
+    __tablename__ = "adopter"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
 
 engine = create_engine('sqlite:///puppyshelter.db')
 Base.metadata.create_all(engine)
