@@ -19,6 +19,7 @@ class Shelter(Base):
     zip_code = Column(String(10))
     website = Column(String(100))
 
+
 class Puppy(Base):
     """Setup for a puppy object to store in the database"""
     __tablename__ = "puppy"
@@ -26,13 +27,31 @@ class Puppy(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(100), nullable=False)
     date_of_birth = Column(Date)
-    picture = Column(String)
     breed = Column(String(50))
     gender = Column(String(6), nullable=False)
     weight = Column(Numeric(10))
 
     shelter_id = Column(Integer, ForeignKey("shelter.id"))
     shelter = relationship(Shelter)
+
+    # Each puppy has one profile containing extra info.
+    # This is a one-to-one association.
+    profile = relationship("Profile", uselist=False, backref="puppy")
+
+
+class Profile(Base):
+    """Setup for a puppy profile object.
+
+    One puppy may only have one profile.
+    """
+    __tablename__ = "profile"
+
+    id = Column(Integer, primary_key=True)
+    picture = Column(String)
+    description = Column(String, nullable=False)
+    special_needs = Column(String)
+
+    puppy_id = Column(Integer, ForeignKey("puppy.id"))
 
 
 engine = create_engine('sqlite:///puppyshelter.db')
