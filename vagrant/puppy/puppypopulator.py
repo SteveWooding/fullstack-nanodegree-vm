@@ -3,7 +3,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from database_setup import Base, Shelter, Puppy
+from database_setup import Base, Shelter, Puppy, Profile
 from random import randint
 import datetime
 import random
@@ -91,6 +91,8 @@ puppy_images = [
     "http://pixabay.com/get/7dcd78e779f8110ca876/1433170979/dog-710013_1280.jpg?direct",
     "http://pixabay.com/get/31d494632fa1c64a7225/1433171005/dog-668940_1280.jpg?direct"]
 
+puppy_descriptions = ["So cute", "Very well behaved", "Adorable",
+                      "Little bundle of joy"]
 
 def CreateRandomAge():
     """Create a random age for a puppy.
@@ -120,22 +122,34 @@ def CreateRandomWeight():
     return random.uniform(1.0, 40.0)
 
 
-for male_name in male_names:
+for i, male_name in enumerate(male_names):
     new_puppy = Puppy(name=male_name,
                       gender="male",
                       date_of_birth=CreateRandomAge(),
-                      picture=random.choice(puppy_images),
                       shelter_id=randint(1, 5),
                       weight=CreateRandomWeight())
+
+    new_profile = Profile(description=random.choice(puppy_descriptions),
+                          picture=random.choice(puppy_images),
+                          puppy_id=i + 1)
+
     session.add(new_puppy)
+    session.add(new_profile)
     session.commit()
 
-for female_name in female_names:
+num_males = len(male_names)
+
+for i, female_name in enumerate(female_names):
     new_puppy = Puppy(name=female_name,
                       gender="female",
                       date_of_birth=CreateRandomAge(),
-                      picture=random.choice(puppy_images),
                       shelter_id=randint(1, 5),
                       weight=CreateRandomWeight())
+
+    new_profile = Profile(description=random.choice(puppy_descriptions),
+                          picture=random.choice(puppy_images),
+                          puppy_id=i + num_males + 1)
+
     session.add(new_puppy)
+    session.add(new_profile)
     session.commit()
