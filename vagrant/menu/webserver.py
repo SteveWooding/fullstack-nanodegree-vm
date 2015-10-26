@@ -55,7 +55,9 @@ class WebServerHandler(BaseHTTPRequestHandler):
             message += ("<html><body>")
 
             for restaurant in restaurants:
-                message += "<p>%s</p>" % restaurant.name
+                message += "<p>%s</br>" % restaurant.name
+                message += "<a href='#'>Edit</a></br>"
+                message += "<a href='#'>Delete</a></p>"
 
             message += ("</body></html>")
             self.wfile.write(message)
