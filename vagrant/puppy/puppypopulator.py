@@ -59,7 +59,7 @@ shelter5 = Shelter(name="Palo Alto Humane Society",
                    state="California",
                    zip_code="94025",
                    website="paloaltohumane.org",
-                   max_capacity=21)
+                   max_capacity=10)
 session.add(shelter5)
 
 session.commit()
@@ -138,6 +138,18 @@ for i, male_name in enumerate(male_names):
                           picture=random.choice(puppy_images),
                           puppy_id=i + 1)
 
+    shelter = session.query(Shelter).filter_by(id=new_puppy.shelter_id).one()
+    if shelter.current_occupancy == shelter.max_capacity:
+        # Find shelter with some room
+        free_shelter = (session.query(Shelter).
+                         filter(Shelter.current_occupancy < Shelter.max_capacity).first())
+        new_puppy.shelter_id = free_shelter.id
+        free_shelter.current_occupancy += 1
+        session.add(free_shelter)
+    else:
+        shelter.current_occupancy += 1
+        session.add(shelter)
+
     session.add(new_puppy)
     session.add(new_profile)
     session.commit()
@@ -154,6 +166,18 @@ for i, female_name in enumerate(female_names):
     new_profile = Profile(description=random.choice(puppy_descriptions),
                           picture=random.choice(puppy_images),
                           puppy_id=i + num_males + 1)
+
+    shelter = session.query(Shelter).filter_by(id=new_puppy.shelter_id).one()
+    if shelter.current_occupancy == shelter.max_capacity:
+        # Find shelter with some room
+        free_shelter = (session.query(Shelter).
+                         filter(Shelter.current_occupancy < Shelter.max_capacity).first())
+        new_puppy.shelter_id = free_shelter.id
+        free_shelter.current_occupancy += 1
+        session.add(free_shelter)
+    else:
+        shelter.current_occupancy += 1
+        session.add(shelter)
 
     session.add(new_puppy)
     session.add(new_profile)
