@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 app = Flask(__name__)
 
 from sqlalchemy import create_engine
@@ -21,17 +21,8 @@ def restaurant_menu(restaurant_id):
         return "No restaurant exists with that ID."
 
     items = session.query(MenuItem).filter_by(restaurant_id=restaurant.id)
-    output = ''
-    for item in items:
-        output += '<p>'
-        output += item.name
-        output += '</br>'
-        output += item.price
-        output += '</br>'
-        output += item.description
-        output += '</p>'
 
-    return output
+    return render_template('menu.html', restaurant=restaurant, items=items)
 
 # Task 1: Create route for newMenuItem function here
 @app.route('/restaurant/<int:restaurant_id>/new/')
