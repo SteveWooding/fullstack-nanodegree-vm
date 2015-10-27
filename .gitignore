@@ -58,3 +58,6 @@ target/
 
 # Vagrant
 .vagrant/
+
+# SQLite DB files
+*.db
