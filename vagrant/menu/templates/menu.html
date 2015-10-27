@@ -13,7 +13,11 @@
 
 <p>{{i.description}}</p>
 
-<p> {{i.price}} </p>
+<p>{{i.price}}</p>
+
+<p><a href={{ url_for('editMenuItem', restaurant_id=restaurant.id, menu_id=i.id) }}>Edit</a></p>
+
+<p><a href={{ url_for('deleteMenuItem', restaurant_id=restaurant.id, menu_id=i.id) }}>Delete</a></p>
 
 </div>
 
