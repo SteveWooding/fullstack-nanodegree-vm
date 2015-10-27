@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 app = Flask(__name__)
 
 from sqlalchemy import create_engine
@@ -31,10 +31,11 @@ def newMenuItem(restaurant_id):
         new_item = MenuItem(name=request.form['name'], restaurant_id=restaurant_id)
         session.add(new_item)
         session.commit()
-
+        flash("new menu item created!")
         return redirect(url_for('restaurant_menu', restaurant_id=restaurant_id))
     else:
         return render_template('new_menu_item.html', restaurant_id=restaurant_id)
+
 
 # Task 2: Create route for editMenuItem function here
 @app.route('/restaurant/<int:restaurant_id>/<int:menu_id>/edit/',
@@ -70,5 +71,6 @@ def deleteMenuItem(restaurant_id, menu_id):
 
 
 if __name__ == '__main__':
+    app.secret_key = 'super_secret_key'
     app.debug = True
     app.run(host='0.0.0.0', port=5000)
