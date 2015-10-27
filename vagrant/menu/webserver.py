@@ -7,7 +7,7 @@ import cgi
 
 def connect_to_db(dbname="sqlite:///restaurantmenu.db"):
     """Setup the connection to the database"""
-    engine = create_engine("sqlite:///restaurantmenu.db")
+    engine = create_engine(dbname)
     Base.metadata.bind = engine
     DBSession = sessionmaker(bind=engine)
     return DBSession()
@@ -29,6 +29,7 @@ class WebServerHandler(BaseHTTPRequestHandler):
             self.wfile.write(message)
             print message
             return
+
         elif self.path.endswith("/hola"):
             self.send_response(200)
             self.send_header('Content-type', 'text/html')
@@ -44,6 +45,7 @@ class WebServerHandler(BaseHTTPRequestHandler):
             self.wfile.write(message)
             print message
             return
+
         elif self.path.endswith("/restaurants"):
             db_session = connect_to_db()
             restaurants = db_session.query(Restaurant).all()
@@ -57,7 +59,7 @@ class WebServerHandler(BaseHTTPRequestHandler):
 
             for restaurant in restaurants:
                 message += "<p>%s</br>" % restaurant.name
-                message += "<a href='#'>Edit</a></br>"
+                message += "<a href='/restaurants/%s/edit'>Edit</a></br>" % restaurant.id
                 message += "<a href='#'>Delete</a></p>"
 
             message += ("</body></html>")
@@ -66,7 +68,6 @@ class WebServerHandler(BaseHTTPRequestHandler):
             return
 
         elif self.path.endswith("/restaurants/new"):
-            db_session = connect_to_db()
 
             self.send_response(200)
             self.send_header('Content-type', 'text/html')
@@ -82,6 +83,33 @@ class WebServerHandler(BaseHTTPRequestHandler):
             message += ("</body></html>")
             self.wfile.write(message)
             print message
+            return
+
+        elif (self.path.startswith("/restaurants/") and
+              self.path.endswith("/edit")):
+
+            # Extract the restaurant ID number
+            url_elements = self.path.split("/")
+            restaurant_id = int(url_elements[2])
+
+            db_session = connect_to_db()
+            restaurant = db_session.query(Restaurant).filter_by(id=restaurant_id).one()
+
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            message = ""
+            message += "<html><body><h1>"
+            message += restaurant.name
+            message += "</h1><form method='POST' enctype='multipart/form-data' "
+            message += "action='/restaurants/%s/edit'>" % restaurant.id
+            message += "<input name='new_rest_name' type='text' "
+            message += "placeholder='%s'>" % restaurant.name
+            message += "<input type='submit' value='Rename'></form>"
+            message += ("</body></html>")
+            self.wfile.write(message)
+            print message
+            return
 
         else:
             self.send_error(404, 'File Not Found: %s' % self.path)
@@ -110,6 +138,33 @@ class WebServerHandler(BaseHTTPRequestHandler):
 
                 return
 
+            elif (self.path.startswith("/restaurants/") and
+                  self.path.endswith("/edit")):
+
+                ctype, pdict = cgi.parse_header(
+                    self.headers.getheader('content-type'))
+
+                if ctype == 'multipart/form-data':
+                    fields = cgi.parse_multipart(self.rfile, pdict)
+                    new_restaurant_name = fields.get('new_rest_name')[0]
+
+                url_elements = self.path.split("/")
+                restaurant_id = int(url_elements[2])
+
+                db_session = connect_to_db()
+                restaurant = db_session.query(Restaurant).filter_by(id=restaurant_id).one()
+                restaurant.name = new_restaurant_name
+                db_session.add(restaurant)
+                db_session.commit()
+
+                # Redirect to the restaurants page
+                self.send_response(301)
+                self.send_header('Content-type', 'text/html')
+                self.send_header('Location', '/restaurants')
+                self.end_headers()
+
+                return
+
 
             else:
                 self.send_response(301)
@@ -127,9 +182,9 @@ class WebServerHandler(BaseHTTPRequestHandler):
                 output += "<h1> %s </h1>" % messagecontent[0]
 
                 output += ("<form method='POST' enctype='multipart/form-data' "
-                        "action='/hello'><h2>What would you like me to say?"
-                        "</h2><input name='message' type='text'><input type="
-                        "'submit' value='Submit'></form>")
+                           "action='/hello'><h2>What would you like me to say?"
+                           "</h2><input name='message' type='text'><input type="
+                           "'submit' value='Submit'></form>")
 
                 output += "</body></html>"
                 self.wfile.write(output)
