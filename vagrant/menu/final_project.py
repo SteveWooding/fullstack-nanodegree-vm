@@ -22,7 +22,7 @@ def show_restaurants():
 @app.route('/restaurant/new/')
 def new_restaurant():
     """Create a new restaurant"""
-    return "This page will be for making a new restaurant"
+    return render_template('new_restaurant.html')
 
 
 @app.route('/restaurant/<int:restaurant_id>/edit/')
