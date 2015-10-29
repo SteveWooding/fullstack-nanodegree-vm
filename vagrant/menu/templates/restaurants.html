@@ -3,9 +3,12 @@
     <title>Restaurants</title>
 </head>
 <body>
-    <h1>Restaurants</h1>
-    <p><a href="{{ url_for('new_restaurant') }}">Add New Restaurant</a></p>
+<h1>Restaurants</h1>
+<p><a href="{{ url_for('new_restaurant') }}">Add New Restaurant</a></p>
 
+{% if restaurants|length == 0 %}
+<p>You currently have no restaurants.</p>
+{% else %}
     {% for restaurant in restaurants %}
     <div>
         <p>
@@ -17,5 +20,6 @@
         </p>
     </div>
     {% endfor %}
+{% endif %}
 </body>
 </html>
