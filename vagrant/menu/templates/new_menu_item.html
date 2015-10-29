@@ -1,12 +1,19 @@
 <html>
+<head>
+    <title>Create New Menu Item</title>
+</head>
 <body>
 
-<h1>New Menu Item</h1>
+<h1>Create New Menu Item</h1>
+<h2>for {{restaurant.name}} restaurant</h2>
 
-<form action="{{ url_for('newMenuItem', restaurant_id=restaurant_id)}}" method='post'>
-    <p>Name:</p>
-    <input type='text' size='30' name='name'>
-    <input type='submit' value='Create'>
+<form action="{{ url_for('new_menu_item', restaurant_id=restaurant.id) }}" method='post'>
+    <p>Name: <input type="text" size="30" name="name"></p>
+    <p>Description: <input type="text" size="30" name="description"></p>
+    <p>Price: <input type="text" size="10" name="price"></p>
+    <p>Course: <input type="text" size="10" name="course"></p>
+    <input type="submit" value="Create">
+    <a href="{{ url_for('show_menu', restaurant_id=restaurant.id) }}">Cancel</a>
 </form>
 
 </body>
