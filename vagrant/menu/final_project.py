@@ -77,6 +77,11 @@ def delete_restaurant(restaurant_id):
 @app.route('/restaurant/<int:restaurant_id>/menu/')
 def show_menu(restaurant_id):
     """Show a restaurant menu"""
+    try:
+        restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+    except NoResultFound:
+        return "No restaurant exists with that ID." # Could create an error page
+    items = session.query(MenuItem).filter_by(restaurant_id=restaurant_id).all()
     return render_template('menu.html', restaurant=restaurant, items=items)
 
 
