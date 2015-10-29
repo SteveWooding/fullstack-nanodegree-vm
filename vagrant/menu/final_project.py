@@ -85,10 +85,24 @@ def show_menu(restaurant_id):
     return render_template('menu.html', restaurant=restaurant, items=items)
 
 
-@app.route('/restaurant/<int:restaurant_id>/menu/new/')
+@app.route('/restaurant/<int:restaurant_id>/menu/new/', methods=['GET','POST'])
 def new_menu_item(restaurant_id):
     """Create a new menu item"""
-    return render_template('new_menu_item.html', restaurant=restaurant)
+    try:
+        restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+    except NoResultFound:
+        return "No restaurant exists with that ID." # Could create an error page
+    if request.method == 'POST':
+        new_item = MenuItem(name=request.form['name'],
+                            description=request.form['description'],
+                            price=request.form['price'],
+                            course=request.form['course'],
+                            restaurant_id=restaurant_id)
+        session.add(new_item)
+        session.commit()
+        return redirect(url_for('show_menu', restaurant_id=restaurant_id))
+    else:
+        return render_template('new_menu_item.html', restaurant=restaurant)
 
 
 @app.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/edit/')
