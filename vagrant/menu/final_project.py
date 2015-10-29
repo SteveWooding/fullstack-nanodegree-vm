@@ -9,7 +9,7 @@ restaurants = [{'name': 'The CRUDdy Crab', 'id': '1'},
 
 #Fake Menu Items (just to test page layout)
 items = [ {'name':'Cheese Pizza', 'description':'made with fresh cheese', 'price':'$5.99','course' :'Entree', 'id':'1'}, {'name':'Chocolate Cake','description':'made with Dutch Chocolate', 'price':'$3.99', 'course':'Dessert','id':'2'},{'name':'Caesar Salad', 'description':'with fresh organic vegetables','price':'$5.99', 'course':'Entree','id':'3'},{'name':'Iced Tea', 'description':'with lemon','price':'$.99', 'course':'Beverage','id':'4'},{'name':'Spinach Dip', 'description':'creamy dip with fresh spinach','price':'$1.99', 'course':'Appetizer','id':'5'} ]
-item =  {'name':'Cheese Pizza','description':'made with fresh cheese','price':'$5.99','course' :'Entree', 'id':'1'}
+item =  {'name':'Cheese Pizza','description':'made with fresh cheese','price':'$5.99','course' :'Entree', 'id':'1', 'restaurant_id':'1'}
 
 
 @app.route('/')
@@ -61,7 +61,9 @@ def edit_menu_item(restaurant_id, menu_id):
 @app.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/delete/')
 def delete_menu_item(restaurant_id, menu_id):
     """Delete a menu item"""
-    return "This page is for deleting menu item %s" % menu_id
+    return render_template('delete_menu_item.html',
+                           restaurant=restaurant,
+                           item=item)
 
 
 if __name__ == '__main__':
