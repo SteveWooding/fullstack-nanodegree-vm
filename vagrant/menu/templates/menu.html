@@ -16,6 +16,7 @@
         {% endif %}
     {% endwith %}
 
+<p><a href="{{ url_for('show_restaurants') }}">List Restaurants</a></p>
 <p><a href="{{ url_for('new_menu_item', restaurant_id=restaurant.id) }}">Create New Item</a></p>
 
 {% for i in items %}
