@@ -27,8 +27,12 @@ body {
     background-image: url('../images/background.jpg');
 }
 
-h1, h2, h3, h4 {
+h1, h3, h4 {
     color: #FFFFFF;
+}
+
+p {
+    color: #CCCCCC;
 }
 
 a {
@@ -52,4 +56,10 @@ a:hover {
 
 a.rest-name {
     color:#FFFFFF;
+}
+
+h2 {
+    font-style: italic;
+    color:#FFFFCC;
+    margin-top: 30px;
 }
