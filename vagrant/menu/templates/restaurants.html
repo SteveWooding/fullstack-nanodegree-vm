@@ -1,36 +1,58 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <title>Restaurants</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-<h1>Restaurants</h1>
+<div class="container">
+<div class="pane">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3 text-center"><h1>Restaurants</h1></div>
+    </div>
 
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <ul class="flash">
-            {% for message in messages %}
-                <li><strong>{{ message }}</strong></li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-{% endwith %}
+    <div class="row">
+        <div class=".col-md-4">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class="flash">
+                        {% for message in messages %}
+                            <li><strong>{{ message }}</strong></li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+        </div>
+    </div>
 
-<p><a href="{{ url_for('new_restaurant') }}">Add New Restaurant</a></p>
+<div class="row">
+    <div class="col-md-6 col-md-offset-3 text-right">
+        <p><a href="{{ url_for('new_restaurant') }}">Add New Restaurant</a></p>
+    </div>
+</div>
+
 
 {% if restaurants|length == 0 %}
-<p>You currently have no restaurants.</p>
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <p>You currently have no restaurants.</p>
+    </div>
+</div>
 {% else %}
     {% for restaurant in restaurants %}
-    <div>
-        <p>
-            <a href="{{ url_for('show_menu', restaurant_id=restaurant.id) }}">{{restaurant.name}}</a>
-        </p>
-        <p>
+    <div class="row">
+        <h2 class="col-md-6 col-md-offset-3">
+            <a class="rest-name" href="{{ url_for('show_menu', restaurant_id=restaurant.id) }}">{{restaurant.name}}</a>
+        </h2>
+        <p class="col-md-3 col-md-offset-3">
             <a href="{{ url_for('edit_restaurant', restaurant_id=restaurant.id) }}">Edit</a>
             <a href="{{ url_for('delete_restaurant', restaurant_id=restaurant.id) }}">Delete</a>
         </p>
     </div>
     {% endfor %}
 {% endif %}
+</div>
+</div>
 </body>
 </html>
