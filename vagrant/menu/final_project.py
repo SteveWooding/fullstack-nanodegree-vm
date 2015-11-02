@@ -46,8 +46,11 @@ def new_restaurant():
 @app.route('/restaurant/<int:restaurant_id>/edit/', methods=['GET', 'POST'])
 def edit_restaurant(restaurant_id):
     """Edit a restaurant"""
-    restaurant_to_edit = (session.query(Restaurant).
-                          filter_by(id=restaurant_id).one())
+    try:
+        restaurant_to_edit = (session.query(Restaurant).
+                              filter_by(id=restaurant_id).one())
+    except:
+        return "No restaurant exists with that ID."
     if request.method == 'POST':
         if request.form['name']:
             restaurant_to_edit.name = request.form['name']
@@ -62,8 +65,11 @@ def edit_restaurant(restaurant_id):
 @app.route('/restaurant/<int:restaurant_id>/delete/', methods=['GET', 'POST'])
 def delete_restaurant(restaurant_id):
     """Delete a restaurant"""
-    restaurant_to_delete = (session.query(Restaurant).
-                            filter_by(id=restaurant_id).one())
+    try:
+        restaurant_to_delete = (session.query(Restaurant).
+                                filter_by(id=restaurant_id).one())
+    except NoResultFound:
+        return "No restaurant exists with that ID."
     if request.method == 'POST':
         session.delete(restaurant_to_delete)
         session.commit()
