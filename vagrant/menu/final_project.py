@@ -133,12 +133,26 @@ def edit_menu_item(restaurant_id, menu_id):
                                item=item)
 
 
-@app.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/delete/')
+@app.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/delete/',
+           methods=['GET','POST'])
 def delete_menu_item(restaurant_id, menu_id):
     """Delete a menu item"""
-    return render_template('delete_menu_item.html',
-                           restaurant=restaurant,
-                           item=item)
+    try:
+        restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+    except NoResultFound:
+        return "No restaurant exists with that ID." # Could create an error page
+    try:
+        item = session.query(MenuItem).filter_by(id=menu_id).one()
+    except NoResultFound:
+        return "No menu item exists with that ID."
+    if request.method == 'POST':
+        session.delete(item)
+        session.commit()
+        return redirect(url_for('show_menu', restaurant_id=restaurant_id))
+    else:
+        return render_template('delete_menu_item.html',
+                               restaurant=restaurant,
+                               item=item)
 
 
 if __name__ == '__main__':
