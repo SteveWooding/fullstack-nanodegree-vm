@@ -4,6 +4,17 @@
 </head>
 <body>
 <h1>Restaurants</h1>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul class="flash">
+            {% for message in messages %}
+                <li><strong>{{ message }}</strong></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+
 <p><a href="{{ url_for('new_restaurant') }}">Add New Restaurant</a></p>
 
 {% if restaurants|length == 0 %}
