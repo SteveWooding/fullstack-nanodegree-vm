@@ -7,12 +7,25 @@ from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Restaurant, MenuItem
 from sqlalchemy.orm.exc import NoResultFound
 
+# Imports for login feature
+from flask import session as login_session
+import random, string
+
 engine = create_engine('sqlite:///restaurantmenu.db')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+# Create a state token to prevent request forgery.
+# Store it in the session for later validation.
+@app.route('/login')
+def show_login():
+    """Show the login screen to a user."""
+    state = ''.join(random.choice(string.ascii_uppercase + string.digits)
+                    for x in xrange(32))
+    login_session['state'] = state
+    return "The current session state is %s" %  login_session['state']
 
 @app.route('/')
 @app.route('/restaurants/')
