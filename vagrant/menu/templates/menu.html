@@ -57,14 +57,18 @@
 {%- endmacro %}
 
 {% if items|length == 0 %}
-    <p>You currently have no menu items.</p>
+    <div class="row">
+        <div class="col-md-4 col-md-offset-1 col-sm-4 col-sm-offset-1 col-xs-4 col-xs-offset-1">
+            <p>You currently have no menu items.</p>
+        </div>
+    </div>
 {% else %}
    {{ display_course('Appetizer') }}
    {{ display_course('Entree') }}
    {{ display_course('Dessert') }}
    {{ display_course('Beverage') }}
 {% endif %}
-
+<div class="spacer50"></div>
 </div>
 </div>
 </body>
