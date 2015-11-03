@@ -1,16 +1,36 @@
 <html>
+
 <head>
     <title>Add New Restaurant</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
-<body>
-    <h1>Add New Restaurant</h1>
 
-    <form action="{{ url_for('new_restaurant') }}" method="post">
-        <p>Name:
-            <input type="text" size="30" name="name">
-            <input type="submit", value="Add">
-            <a href="{{ url_for('show_restaurants') }}">Cancel</a>
-        </p>
-    </form>
+<body>
+    <div class="container">
+        <div class="pane">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 text-center">
+                    <h1>Add New Restaurant</h1>
+                </div>
+            </div>
+
+            <div class="panel"></div>
+
+            <div class="row">
+                <div class="col-md-6 col-md-offset-1">
+                    <form action="{{ url_for('new_restaurant') }}" method="post">
+                        <p>Name:
+                            <input type="text" size="30" name="name">
+                            <input type="submit", value="Add" class="btn btn-primary active">
+                            <a href="{{ url_for('show_restaurants') }}" class="btn btn-default active" role="button">Cancel</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+            <div class="spacer50"></div>
+        </div>
+    </div>
 </body>
+
 </html>
