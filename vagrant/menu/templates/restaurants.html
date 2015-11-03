@@ -12,6 +12,8 @@
         <div class="col-md-6 col-md-offset-3 text-center"><h1>Restaurants</h1></div>
     </div>
 
+    <div class="panel"></div>
+
     <div class="row">
         <div class=".col-md-4">
             {% with messages = get_flashed_messages() %}
@@ -27,7 +29,7 @@
     </div>
 
 <div class="row">
-    <div class="col-md-6 col-md-offset-3 text-right">
+    <div class="col-md-6 col-md-offset-4 col-xs-6 col-xs-offset-5 text-right">
         <p><a href="{{ url_for('new_restaurant') }}">Add New Restaurant</a></p>
     </div>
 </div>
@@ -42,16 +44,17 @@
 {% else %}
     {% for restaurant in restaurants %}
     <div class="row">
-        <h2 class="col-md-6 col-md-offset-3">
+        <h2 class="col-md-6 col-md-offset-3 col-xs-6 col-xs-offset-2">
             <a class="rest-name" href="{{ url_for('show_menu', restaurant_id=restaurant.id) }}">{{restaurant.name}}</a>
         </h2>
-        <p class="col-md-3 col-md-offset-3">
+        <p class="col-md-3 col-md-offset-3 col-xs-3 col-xs-offset-2">
             <a href="{{ url_for('edit_restaurant', restaurant_id=restaurant.id) }}">Edit</a>
             <a href="{{ url_for('delete_restaurant', restaurant_id=restaurant.id) }}">Delete</a>
         </p>
     </div>
     {% endfor %}
 {% endif %}
+<div class="spacer50"></div>
 </div>
 </div>
 </body>
