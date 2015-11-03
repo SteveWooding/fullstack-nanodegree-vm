@@ -1,15 +1,37 @@
 <html>
+
 <head>
     <title>Edit Restaurant</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
+
 <body>
-<h1>Edit Restaurant</h1>
-<form action="{{ url_for('edit_restaurant', restaurant_id=restaurant.id) }}" method="post">
-    <p>Edit Name:
-        <input type="text" size="30" name="name" value="{{restaurant.name}}">
-        <input type="submit" value="Save">
-        <a href="{{ url_for('show_restaurants') }}">Cancel</a>
-    </p>
-</form>
+    <div class="container">
+        <div class="pane">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 text-center">
+                    <h1>Edit Restaurant</h1>
+                </div>
+            </div>
+
+            <div class="panel"></div>
+
+            <div class="row">
+                <div class="col-md-6 col-md-offset-1">
+                    <form action="{{ url_for('edit_restaurant', restaurant_id=restaurant.id) }}" method="post">
+                        <div class="form-group">
+                            <label for="restaurantName">Name</label>
+                            <input type="text" class="form-control" id="restaurantName" name="name" value="{{restaurant.name}}">
+                        </div>
+                            <input type="submit" value="Save" class="btn btn-primary">
+                            <a href="{{ url_for('show_restaurants') }}" class="btn btn-default">Cancel</a>
+                    </form>
+                </div>
+            </div>
+            <div class="spacer50"></div>
+        </div>
+    </div>
 </body>
+
 </html>
