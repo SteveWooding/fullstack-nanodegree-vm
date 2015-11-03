@@ -1,29 +1,80 @@
 <html>
+
 <head>
     <title>Create New Menu Item</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
+
 <body>
+    <div class="container">
+        <div class="pane">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 text-center">
+                    <h1>Create New Menu Item</h1>
+                </div>
+            </div>
 
-<h1>Create New Menu Item</h1>
-<h2>for {{restaurant.name}} restaurant</h2>
+            <div class="panel"></div>
 
-<form action="{{ url_for('new_menu_item', restaurant_id=restaurant.id) }}" method='post'>
-    <p>Name:</p><input type="text" size="30" name="name">
-    <p>Description:</p><input type="text" size="30" name="description">
-    <p>Price:</p><input type="text" size="10" name="price">
-    <p>Course:</p>
-    <input type="radio" name="course" value="Appetizer"> Appetizer
-    <br>
-    <input type="radio" name="course" value="Entree"> Entree
-    <br>
-    <input type="radio" name="course" value="Dessert"> Dessert
-    <br>
-    <input type="radio" name="course" value="Beverage"> Beverage
-    <p>
-    <input type="submit" value="Create">
-    <a href="{{ url_for('show_menu', restaurant_id=restaurant.id) }}">Cancel</a>
-    </p>
-</form>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-1">
+                    <h2>...for {{restaurant.name}} restaurant</h2>
+                </div>
+            </div>
 
+            <div class="row">
+                <div class="col-md-6 col-md-offset-1">
+                <form action="{{ url_for('new_menu_item', restaurant_id=restaurant.id) }}" method='post'>
+                    <div class="form-group">
+                        <label for="menuItemName">Name</label>
+                        <input type="text" class="form-control" id="menuItemName" name="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="menuItemDescription">Description</label>
+                        <input type="text" class="form-control" id="menuItemDescription" name="description">
+                    </div>
+                    <div class="form-group">
+                        <label for="menuItemPrice">Price</label>
+                        <input type="text" class="form-control" id="menuItemPrice" name="price">
+                    </div>
+                    <div class="form-group">
+                        <label>Course</label>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="course" id="courseAppetizer" value="Appetizer" checked>
+                                Appetizer
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="course" id="courseEntree" value="Entree">
+                                Entree
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="course" id="courseDessert" value="Dessert">
+                                Dessert
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="course" id="courseBeverage" value="Beverage">
+                                Beverage
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary">
+                        <a href="{{ url_for('show_menu', restaurant_id=restaurant.id) }}" class="btn btn-default">Cancel</a>
+                    </div>
+                </form>
+                </div>
+            </div>
+            <div class="spacer50"></div>
+        </div>
+    </div>
 </body>
+
 </html>
