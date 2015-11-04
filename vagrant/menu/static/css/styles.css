@@ -31,7 +31,7 @@ h1, h3, h4 {
     color: #FFFFFF;
 }
 
-p {
+p, figcaption {
     color: #CCCCCC;
 }
 

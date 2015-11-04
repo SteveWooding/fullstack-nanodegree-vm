@@ -20,7 +20,7 @@ import requests
 CLIENT_ID = json.loads(
     open('client_secrets.json',  'r').read())['web']['client_id']
 
-engine = create_engine('sqlite:///restaurantmenu.db')
+engine = create_engine('sqlite:///restaurantmenuwithusers.db')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -165,7 +165,10 @@ def gdisconnect():
 def show_restaurants():
     """Show all restaurants"""
     restaurants = session.query(Restaurant).all()
-    return render_template('restaurants.html', restaurants=restaurants)
+    if 'username' not in login_session:
+        return render_template('public_restaurants.html', restaurants=restaurants)
+    else:
+        return render_template('restaurants.html', restaurants=restaurants)
 
 
 @app.route('/restaurant/new/', methods=['GET', 'POST'])
@@ -235,7 +238,15 @@ def show_menu(restaurant_id):
     except NoResultFound:
         return "No restaurant exists with that ID." # Could create an error page
     items = session.query(MenuItem).filter_by(restaurant_id=restaurant_id).all()
-    return render_template('menu.html', restaurant=restaurant, items=items)
+    if ('username' not in login_session or
+        login_session['user_id'] != restaurant.user_id):
+        creator = get_user_info(restaurant.user_id)
+        return render_template('public_menu.html',
+                               restaurant=restaurant,
+                               items=items,
+                               creator=creator)
+    else:
+        return render_template('menu.html', restaurant=restaurant, items=items)
 
 
 @app.route('/restaurant/<int:restaurant_id>/menu/new/', methods=['GET','POST'])
