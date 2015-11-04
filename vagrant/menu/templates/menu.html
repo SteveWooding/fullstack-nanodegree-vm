@@ -11,6 +11,14 @@
     <div class="row">
         <div class="col-md-6 col-md-offset-3 text-center"><h1>{{restaurant.name}}</h1></div>
     </div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3 text-center">
+            <figure class="creator">
+                <img src="{{ creator.picture }}">
+                <figcaption>{{ creator.name }}</figcaption>
+            </figure>
+        </div>
+    </div>
 
 
     {% with messages = get_flashed_messages() %}

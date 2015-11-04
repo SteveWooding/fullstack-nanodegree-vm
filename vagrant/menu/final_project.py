@@ -166,7 +166,8 @@ def show_restaurants():
     """Show all restaurants"""
     restaurants = session.query(Restaurant).all()
     if 'username' not in login_session:
-        return render_template('public_restaurants.html', restaurants=restaurants)
+        return render_template('public_restaurants.html',
+                               restaurants=restaurants)
     else:
         return render_template('restaurants.html', restaurants=restaurants)
 
@@ -247,16 +248,22 @@ def show_menu(restaurant_id):
         restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
     except NoResultFound:
         return "No restaurant exists with that ID." # Could create an error page
+
+    creator = get_user_info(restaurant.user_id)
     items = session.query(MenuItem).filter_by(restaurant_id=restaurant_id).all()
+
     if ('username' not in login_session or
         login_session['user_id'] != restaurant.user_id):
-        creator = get_user_info(restaurant.user_id)
+
         return render_template('public_menu.html',
                                restaurant=restaurant,
                                items=items,
                                creator=creator)
     else:
-        return render_template('menu.html', restaurant=restaurant, items=items)
+        return render_template('menu.html',
+                               restaurant=restaurant,
+                               items=items,
+                               creator=creator)
 
 
 @app.route('/restaurant/<int:restaurant_id>/menu/new/', methods=['GET','POST'])
