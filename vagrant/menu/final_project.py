@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Restaurant, MenuItem
+from database_setup import Base, Restaurant, MenuItem, User
 from sqlalchemy.orm.exc import NoResultFound
 
 # Imports for login feature
@@ -108,6 +108,12 @@ def gconnect():
     login_session['picture'] = data["picture"]
     login_session['email'] = data["email"]
 
+    # Check if the user exists in the database. If not create a new user.
+    user_id = get_user_id(login_session['email'])
+    if user_id is None:
+        user_id = create_user(login_session)
+    login_session['user_id'] = user_id
+
     output = ''
     output += '<h1>Welcome, '
     output += login_session['username']
@@ -168,7 +174,8 @@ def new_restaurant():
     if 'username' not in login_session:
         return redirect('/login')
     if request.method == 'POST':
-        new_restaurant = Restaurant(name=request.form['name'])
+        new_restaurant = Restaurant(name=request.form['name'],
+                                    user_id=login_session['user_id'])
         session.add(new_restaurant)
         session.commit()
         flash("New Restaurant Created")
@@ -245,7 +252,8 @@ def new_menu_item(restaurant_id):
                             description=request.form['description'],
                             price=request.form['price'],
                             course=request.form['course'],
-                            restaurant_id=restaurant_id)
+                            restaurant_id=restaurant_id,
+                            user_id=restaurant.user_id)
         session.add(new_item)
         session.commit()
         flash("New Menu Item Created")
@@ -337,6 +345,32 @@ def restaurant_menu_item_json(restaurant_id, menu_id):
     except:
         return "No menu item exists with that ID."
     return jsonify(MenuItem=item.serialize)
+
+
+def create_user(login_session):
+    """Create a new user in the database."""
+    new_user = User(name=login_session['username'],
+                    email=login_session['email'],
+                    picture=login_session['picture'])
+    session.add(new_user)
+    session.commit()
+    user = session.query(User).filter_by(email=login_session['email']).one()
+    return user.id
+
+
+def get_user_info(user_id):
+    """Get info for a user from the database."""
+    user = session.query(User).filter_by(id=user_id).one()
+    return user
+
+
+def get_user_id(email):
+    """Given an email address, return the user ID, if in the database."""
+    try:
+        user = session.query(User).filter_by(email=email).one()
+        return user.id
+    except:
+        return None
 
 
 if __name__ == '__main__':
