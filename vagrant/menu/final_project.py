@@ -197,6 +197,11 @@ def edit_restaurant(restaurant_id):
                               filter_by(id=restaurant_id).one())
     except:
         return "No restaurant exists with that ID."
+
+    if login_session['user_id'] != restaurant_to_edit.user_id:
+        flash("This is not your restaurant, so you can't edit it. Sorry :-(")
+        return redirect(url_for('show_restaurants'))
+
     if request.method == 'POST':
         if request.form['name']:
             restaurant_to_edit.name = request.form['name']
@@ -219,6 +224,11 @@ def delete_restaurant(restaurant_id):
                                 filter_by(id=restaurant_id).one())
     except NoResultFound:
         return "No restaurant exists with that ID."
+
+    if login_session['user_id'] != restaurant_to_delete.user_id:
+        flash("This is not your restaurant, so you can't delete it. Sorry :-(")
+        return redirect(url_for('show_restaurants'))
+
     if request.method == 'POST':
         session.delete(restaurant_to_delete)
         session.commit()
@@ -258,6 +268,11 @@ def new_menu_item(restaurant_id):
         restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
     except NoResultFound:
         return "No restaurant exists with that ID." # Could create an error page
+
+    if login_session['user_id'] != restaurant.user_id:
+        flash("This is not your restaurant, so you can't create a new menu item. Sorry :-(")
+        return redirect(url_for('show_menu', restaurant_id=restaurant_id))
+
     if request.method == 'POST':
         new_item = MenuItem(name=request.form['name'],
                             description=request.form['description'],
@@ -287,6 +302,11 @@ def edit_menu_item(restaurant_id, menu_id):
         item = session.query(MenuItem).filter_by(id=menu_id).one()
     except NoResultFound:
         return "No menu item exists with that ID."
+
+    if login_session['user_id'] != restaurant.user_id:
+        flash("This is not your restaurant, so you can't edit a menu item. Sorry :-(")
+        return redirect(url_for('show_menu', restaurant_id=restaurant_id))
+
     if request.method == 'POST':
         if request.form['name']:
             item.name = request.form['name']
@@ -318,6 +338,11 @@ def delete_menu_item(restaurant_id, menu_id):
         item = session.query(MenuItem).filter_by(id=menu_id).one()
     except NoResultFound:
         return "No menu item exists with that ID."
+
+    if login_session['user_id'] != restaurant.user_id:
+        flash("This is not your restaurant, so you can't delete a new menu item. Sorry :-(")
+        return redirect(url_for('show_menu', restaurant_id=restaurant_id))
+
     if request.method == 'POST':
         session.delete(item)
         session.commit()

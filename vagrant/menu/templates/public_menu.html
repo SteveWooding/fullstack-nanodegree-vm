@@ -1,0 +1,79 @@
+<html>
+<head>
+    <title>Menu for {{restaurant.name}}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body>
+<div class="container">
+<div class="pane">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3 text-center"><h1>{{restaurant.name}}</h1></div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3 text-center">
+            <figure class="creator">
+                <img src="{{ creator.picture }}">
+                <figcaption>{{ creator.name }}</figcaption>
+            </figure>
+        </div>
+    </div>
+
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="row">
+                <div class="col-md-4 col-md-offset-1">
+                    <ul class="flash">
+                        {% for message in messages %}
+                            <li><strong>{{ message }}</strong></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+
+<div class="row">
+    <div class="col-md-4 col-md-offset-1 col-sm-4 col-sm-offset-1 col-xs-4 col-xs-offset-1">
+        <p><a href="{{ url_for('show_restaurants') }}">Restaurant List</a></p>
+    </div>
+</div>
+
+{% macro display_course(course_name) -%}
+    {% for i in items if i.course == course_name %}
+        {% if loop.first %}
+            <div class="row">
+                <div class="col-md-4 col-md-offset-2 col-sm-4 col-sm-offset-2 col-xs-4 col-xs-offset-1"><h2>{{ course_name }}s</h2></div>
+            </div>
+        {% endif %}
+            <div class="row">
+                <div class="col-md-5 col-md-offset-2 col-sm-4 col-sm-offset-2 col-xs-4 col-xs-offset-1"><h3>{{i.name}}</h3></div>
+                <div class="col-md-3 col-sm-4 col-sm-offset-1 col-xs-4 col-xs-offset-2 text-right"><h3>{{i.price}}</h3></div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 col-md-offset-2 col-sm-4 col-sm-offset-2 col-xs-4 col-xs-offset-1"><p>{{i.description}}</p></div>
+            </div>
+    {% endfor %}
+{%- endmacro %}
+
+{% if items|length == 0 %}
+    <div class="row">
+        <div class="col-md-4 col-md-offset-1 col-sm-4 col-sm-offset-1 col-xs-4 col-xs-offset-1">
+            <p>You currently have no menu items.</p>
+        </div>
+    </div>
+{% else %}
+   {{ display_course('Appetizer') }}
+   {{ display_course('Entree') }}
+   {{ display_course('Dessert') }}
+   {{ display_course('Beverage') }}
+{% endif %}
+<div class="spacer50"></div>
+</div>
+</div>
+</body>
+
+</html>
