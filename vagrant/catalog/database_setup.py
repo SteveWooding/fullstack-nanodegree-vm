@@ -71,5 +71,12 @@ class Item(Base):
     user = relationship(User)
 
 
-engine = create_engine('sqlite:///itemcatalog.db')
-Base.metadata.create_all(engine)
+def create_db():
+    """Create an empty database with the tables defined above."""
+    engine = create_engine('sqlite:///itemcatalog.db')
+    Base.metadata.create_all(engine)
+    print "Database file itemcatalog.db created..."
+
+
+if __name__ == '__main__':
+    create_db()
