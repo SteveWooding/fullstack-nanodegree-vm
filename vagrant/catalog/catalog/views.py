@@ -1,4 +1,6 @@
 """Defines the views to be presented to the user."""
+from flask import render_template
+
 from catalog import app
 
 # Dummy database for testing the templates
@@ -35,7 +37,9 @@ item = {'id': '1', 'name': 'Elephant', 'description': 'Large, grey animal',
 @app.route('/catalog/')
 def show_homepage():
     """Show the homepage diplaying the categories and latest items."""
-    return "Homepage"
+    return render_template('homepage.html',
+                           categories=categories,
+                           latest_items=items)
 
 
 @app.route('/catalog/<category_name>/items')
