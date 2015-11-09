@@ -1,4 +1,35 @@
+"""Defines the views to be presented to the user."""
 from catalog import app
+
+# Dummy database for testing the templates
+categories = [
+    {'id': '1', 'name': 'Mammals'},
+    {'id': '2', 'name': 'Birds'},
+    {'id': '3', 'name': 'Fish'},
+    {'id': '4', 'name': 'Reptiles'},
+    {'id': '5', 'name': 'Amphibians'},
+    {'id': '6', 'name': 'Arthropods'},
+]
+
+category = {'id': '1', 'name': 'Mammals'}
+
+items = [
+    {'id': '1', 'name': 'Elephant', 'description': 'Large, grey animal',
+     'category_id': '1'},
+    {'id': '2', 'name': 'Polar Bear', 'description': 'Large, white animal',
+     'category_id': '1'},
+    {'id': '3', 'name': 'Kingfisher', 'description': 'Bird that eats fish',
+     'category_id': '2'},
+    {'id': '4', 'name': 'Blue Tit', 'description': 'A blue & yellow bird',
+     'category_id': '2'},
+    {'id': '5', 'name': 'Swordfish', 'description': 'Fish with a sword',
+     'category_id': '3'},
+    {'id': '6', 'name': 'Whale Shark', 'description': 'A big shark',
+     'category_id': '3'}
+]
+
+item = {'id': '1', 'name': 'Elephant', 'description': 'Large, grey animal',
+        'category_id': '1'}
 
 @app.route('/')
 @app.route('/catalog/')
@@ -16,7 +47,8 @@ def show_items(category_name):
 @app.route('/catalog/<category_name>/<item_name>')
 def show_item(category_name, item_name):
     """Show details of a particular item belonging to a specified category."""
-    return "Show details of item %s in category %s." % (item_name, category_name)
+    return ("Show details of item %s in category %s."
+            % (item_name, category_name))
 
 
 @app.route('/catalog/<item_name>/edit')
