@@ -70,7 +70,9 @@ def create_item():
 @app.route('/catalog/<item_name>/edit/')
 def edit_item(item_name):
     """Edit the details of the specified item."""
-    return "Edit details of the %s item." % item_name
+    return render_template('edit_item.html',
+                           categories=categories,
+                           item=item)
 
 
 @app.route('/catalog/<item_name>/delete/')
