@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block title %}Edit Animal{% endblock %}
+{% block content %}
+    <h2>Delete Animal</h2>
+    <form action="#" method="post">
+        <p>Are you sure you want to delete the animal {{ item.name }}?</p>
+        <input type="submit" value="Delete">
+        <a href="#">Cancel</a>
+    </form>
+{% endblock %}
