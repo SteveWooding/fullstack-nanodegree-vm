@@ -1,12 +1,8 @@
 {% extends "layout.html" %}
 {% block title %}Homepage{% endblock %}
 {% block content %}
-    <h2>Categories</h2>
-    {% for category in categories %}
-    <p>{{ category.name }}</p>
-    {% endfor %}
     <h2>Latest Items</h2>
     {% for item in latest_items %}
-    <p>{{ item.name }}</p>
+    <p><a href="#">{{ item.name }}</a></p>
     {% endfor %}
 {% endblock %}

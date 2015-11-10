@@ -6,6 +6,10 @@
 
 <body>
     <h1>ZooMA - Zoo Management App</h1>
+    <h2>Categories</h2>
+    {% for category in categories %}
+    <p><a href="#">{{ category.name }}</a></p>
+    {% endfor %}
     {% block content %}
     {% endblock content %}
 </body>
