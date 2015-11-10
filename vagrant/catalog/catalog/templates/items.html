@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block title %}{{ category.name }}{% endblock %}
+{% block content %}
+    {% if items|length > 1 %}
+    <h2>{{ category.name }} ({{ items|length }} animals)</h2>
+    {% else %}
+    <h2>{{ category.name }} (1 animal)</h2>
+    {% endif %}
+    {% for item in items %}
+    <p><a href="#">{{ item.name }}</a></p>
+    {% endfor %}
+{% endblock %}
