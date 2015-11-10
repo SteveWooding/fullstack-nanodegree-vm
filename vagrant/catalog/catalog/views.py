@@ -1,7 +1,9 @@
 """Defines the views to be presented to the user."""
 from flask import render_template
+from sqlalchemy import desc
 
-from catalog import app
+from catalog import app, session
+from database_setup import Category, Item
 
 # Dummy database for testing the templates
 categories = [
@@ -10,7 +12,7 @@ categories = [
     {'id': '3', 'name': 'Fish'},
     {'id': '4', 'name': 'Reptiles'},
     {'id': '5', 'name': 'Amphibians'},
-    {'id': '6', 'name': 'Arthropods'},
+    {'id': '6', 'name': 'Arthropods'}
 ]
 
 category = {'id': '1', 'name': 'Mammals'}
@@ -33,13 +35,16 @@ items = [
 item = {'id': '1', 'name': 'Elephant', 'description': 'Large, grey animal',
         'category_id': '1'}
 
+
 @app.route('/')
 @app.route('/catalog/')
 def show_homepage():
     """Show the homepage diplaying the categories and latest items."""
+    categories = session.query(Category).all()
+    latest_items = session.query(Item).order_by(desc(Item.id))[0:10]
     return render_template('homepage.html',
                            categories=categories,
-                           latest_items=items)
+                           latest_items=latest_items)
 
 
 @app.route('/catalog/<category_name>/items/')
