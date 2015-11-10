@@ -78,4 +78,6 @@ def edit_item(item_name):
 @app.route('/catalog/<item_name>/delete/')
 def delete_item(item_name):
     """Delete a specified item from the database."""
-    return "Delete the %s item." % item_name
+    return render_template('delete_item.html',
+                           categories=categories,
+                           item=item)
