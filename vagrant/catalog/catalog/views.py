@@ -141,9 +141,22 @@ def edit_item(item_name):
                                item=item)
 
 
-@app.route('/catalog/<item_name>/delete/')
+@app.route('/catalog/<item_name>/delete/', methods=['GET','POST'])
 def delete_item(item_name):
     """Delete a specified item from the database."""
-    return render_template('delete_item.html',
-                           categories=categories,
-                           item=item)
+    try:
+        item = session.query(Item).filter_by(name=item_name).one()
+    except NoResultFound:
+        # TODO Make this a flash message on homepage.
+        return "The item '%s' does not exist." % item_name
+
+    if request.method == 'POST':
+        session.delete(item)
+        session.commit()
+        category = session.query(Category).filter_by(id=item.category_id).one()
+        return redirect(url_for('show_items', category_name=category.name))
+    else:
+        categories = session.query(Category).all()
+        return render_template('delete_item.html',
+                               categories=categories,
+                               item=item)
