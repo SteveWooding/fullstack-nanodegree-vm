@@ -63,7 +63,8 @@ def show_item(category_name, item_name):
 @app.route('/catalog/new/')
 def create_item():
     """Allow users to create a new item in the catalog."""
-    return "Form to create a new item."
+    return render_template('new_item.html',
+                           categories=categories)
 
 
 @app.route('/catalog/<item_name>/edit/')
