@@ -95,6 +95,7 @@ def create_item():
             # Can't have an item called "items" as this is a route.
             # TODO Replace with flash message.
             return "Can't have an item called 'items'."
+
         category = (session.query(Category)
                     .filter_by(name=request.form['category']).one())
         new_item = Item(category=category,
@@ -109,12 +110,35 @@ def create_item():
                                categories=categories)
 
 
-@app.route('/catalog/<item_name>/edit/')
+@app.route('/catalog/<item_name>/edit/', methods=['GET', 'POST'])
 def edit_item(item_name):
     """Edit the details of the specified item."""
-    return render_template('edit_item.html',
-                           categories=categories,
-                           item=item)
+    try:
+        item = session.query(Item).filter_by(name=item_name).one()
+    except NoResultFound:
+        # TODO Make this a flash message on homepage.
+        return "The item '%s' does not exist." % item_name
+
+    if request.method == 'POST':
+        form_category = (session.query(Category)
+                         .filter_by(name=request.form['category']).one())
+
+        if form_category != item.category:
+            item.category = form_category
+
+        if request.form['name']:
+            item.name = request.form['name']
+        item.description = request.form['description']
+
+        session.add(item)
+        session.commit()
+
+        return redirect(url_for('show_items', category_name=form_category.name))
+    else:
+        categories = session.query(Category).all()
+        return render_template('edit_item.html',
+                               categories=categories,
+                               item=item)
 
 
 @app.route('/catalog/<item_name>/delete/')
