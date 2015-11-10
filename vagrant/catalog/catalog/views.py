@@ -1,40 +1,10 @@
 """Defines the views to be presented to the user."""
 from flask import render_template, request, redirect, url_for
-from sqlalchemy import desc
+from sqlalchemy import desc, literal
 from sqlalchemy.orm.exc import NoResultFound
 
 from catalog import app, session
 from database_setup import Category, Item
-
-# Dummy database for testing the templates
-categories = [
-    {'id': '1', 'name': 'Mammals'},
-    {'id': '2', 'name': 'Birds'},
-    {'id': '3', 'name': 'Fish'},
-    {'id': '4', 'name': 'Reptiles'},
-    {'id': '5', 'name': 'Amphibians'},
-    {'id': '6', 'name': 'Arthropods'}
-]
-
-category = {'id': '1', 'name': 'Mammals'}
-
-items = [
-    {'id': '1', 'name': 'Elephant', 'description': 'Large, grey animal',
-     'category_id': '1'},
-    {'id': '2', 'name': 'Polar Bear', 'description': 'Large, white animal',
-     'category_id': '1'},
-    {'id': '3', 'name': 'Kingfisher', 'description': 'Bird that eats fish',
-     'category_id': '2'},
-    {'id': '4', 'name': 'Blue Tit', 'description': 'A blue & yellow bird',
-     'category_id': '2'},
-    {'id': '5', 'name': 'Swordfish', 'description': 'Fish with a sword',
-     'category_id': '3'},
-    {'id': '6', 'name': 'Whale Shark', 'description': 'A big shark',
-     'category_id': '3'}
-]
-
-item = {'id': '1', 'name': 'Elephant', 'description': 'Large, grey animal',
-        'category_id': '1'}
 
 
 @app.route('/')
@@ -95,6 +65,14 @@ def create_item():
             # Can't have an item called "items" as this is a route.
             # TODO Replace with flash message.
             return "Can't have an item called 'items'."
+
+        # Enforce rule that item names are unique
+        qry = session.query(Item).filter(Item.name == request.form['name'])
+        already_exists = session.query(literal(True)).filter(qry.exists()).scalar()
+        if already_exists is True:
+            # TODO Replace with flash message.
+            return ("There is already an animal with the name '%s'"
+                    % request.form['name'])
 
         category = (session.query(Category)
                     .filter_by(name=request.form['category']).one())
