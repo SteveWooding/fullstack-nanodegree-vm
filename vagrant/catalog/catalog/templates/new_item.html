@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block title %}New Animal{% endblock %}
+{% block content %}
+    <h2>Add New Animal</h2>
+    <form action="#" method="post">
+        <p>Name</p>
+        <input type="text" size="30" name="name">
+        <p>Description</p>
+        <input type="text" size="30" name="description">
+        <p>Category</p>
+        <select name="category">
+            {% for category in categories %}
+            <option value="{{ category.name }}">{{ category.name }}</option>
+            {% endfor %}
+        </select>
+
+        <input type="submit" value="Create">
+        <a href="#">Cancel</a>
+    </form>
+{% endblock %}
