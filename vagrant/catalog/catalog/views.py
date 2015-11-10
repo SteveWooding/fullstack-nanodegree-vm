@@ -55,7 +55,7 @@ def show_items(category_name):
         category = session.query(Category).filter_by(name=category_name).one()
     except NoResultFound:
         # TODO Make this a flash message
-        return "The category %s does not exist." % category_name
+        return "The category '%s' does not exist." % category_name
 
     categories = session.query(Category).all()
     items = session.query(Item).filter_by(category=category).all()
@@ -68,6 +68,19 @@ def show_items(category_name):
 @app.route('/catalog/<category_name>/<item_name>/')
 def show_item(category_name, item_name):
     """Show details of a particular item belonging to a specified category."""
+    try:
+        category = session.query(Category).filter_by(name=category_name).one()
+    except NoResultFound:
+        # TODO Make this a flash message on homepage.
+        return "The category '%s' does not exist." % category_name
+
+    try:
+        item = session.query(Item).filter_by(name=item_name).one()
+    except NoResultFound:
+        # TODO Make this a flash message on homepage.
+        return "The item '%s' does not exist." % item_name
+
+    categories = session.query(Category).all()
     return render_template('item.html',
                            categories=categories,
                            category=category,
