@@ -1,5 +1,5 @@
 """Defines the views to be presented to the user."""
-from flask import render_template
+from flask import render_template, request, redirect, url_for
 from sqlalchemy import desc
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -87,11 +87,26 @@ def show_item(category_name, item_name):
                            item=item)
 
 
-@app.route('/catalog/new/')
+@app.route('/catalog/new/', methods=['GET', 'POST'])
 def create_item():
     """Allow users to create a new item in the catalog."""
-    return render_template('new_item.html',
-                           categories=categories)
+    if request.method == 'POST':
+        if request.form['name'] == "items":
+            # Can't have an item called "items" as this is a route.
+            # TODO Replace with flash message.
+            return "Can't have an item called 'items'."
+        category = (session.query(Category)
+                    .filter_by(name=request.form['category']).one())
+        new_item = Item(category=category,
+                        name=request.form['name'],
+                        description=request.form['description'])
+        session.add(new_item)
+        session.commit()
+        return redirect(url_for('show_homepage'))
+    else:
+        categories = session.query(Category).all()
+        return render_template('new_item.html',
+                               categories=categories)
 
 
 @app.route('/catalog/<item_name>/edit/')
