@@ -3,7 +3,10 @@
 {% block content %}
     <h2>Latest Items</h2>
     {% for item in latest_items %}
-    <p><a href="#">{{ item.name }}</a> <em>({{ item.category.name }})</em></p>
+    <p><a href="{{ url_for('show_item', category_name=item.category.name, item_name=item.name) }}">
+        {{ item.name }}</a>
+       <em>({{ item.category.name }})</em>
+    </p>
     {% endfor %}
-    <p><a href="#">Add new animal</a></p>
+    <p><a href="{{ url_for('create_item') }}">Add new animal</a></p>
 {% endblock %}
