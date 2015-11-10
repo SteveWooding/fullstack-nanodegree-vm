@@ -1,6 +1,7 @@
 """Defines the views to be presented to the user."""
 from flask import render_template
 from sqlalchemy import desc
+from sqlalchemy.orm.exc import NoResultFound
 
 from catalog import app, session
 from database_setup import Category, Item
@@ -50,6 +51,14 @@ def show_homepage():
 @app.route('/catalog/<category_name>/items/')
 def show_items(category_name):
     """Show items belonging to a specified category."""
+    try:
+        category = session.query(Category).filter_by(name=category_name).one()
+    except NoResultFound:
+        # TODO Make this a flash message
+        return "The category %s does not exist." % category_name
+
+    categories = session.query(Category).all()
+    items = session.query(Item).filter_by(category=category).all()
     return render_template('items.html',
                            categories=categories,
                            category=category,
