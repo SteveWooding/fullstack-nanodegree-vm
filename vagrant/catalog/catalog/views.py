@@ -54,8 +54,10 @@ def show_items(category_name):
 @app.route('/catalog/<category_name>/<item_name>/')
 def show_item(category_name, item_name):
     """Show details of a particular item belonging to a specified category."""
-    return ("Show details of item %s in category %s."
-            % (item_name, category_name))
+    return render_template('item.html',
+                           categories=categories,
+                           category=category,
+                           item=item)
 
 
 @app.route('/catalog/<item_name>/edit/')
