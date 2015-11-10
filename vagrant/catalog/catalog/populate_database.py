@@ -213,7 +213,7 @@ def populate_database():
     item11 = Item(
         user=user1,
         category=category6,
-        name="Fire ant",
+        name="Fire Ant",
         description=(
             "Fire ant is the common name for several species of ants in the "
             "genus Solenopsis. They are however only a minority in the genus, "
