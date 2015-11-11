@@ -13,3 +13,4 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 import catalog.views
+import catalog.json
