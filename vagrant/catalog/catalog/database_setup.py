@@ -37,6 +37,8 @@ class Category(Base):
         __tablename__: A string naming the underlining SQL table.
         id: A column in the database for the category ID.
         name: A column for the name of the category.
+        items: A relationship with Item so a category knows about the items
+            it contains.
     """
     __tablename__ = 'category'
 
@@ -66,7 +68,7 @@ class Item(Base):
             belongs to.
         category: Makes a one-to-one relationship to the Category class.
         user_id: A column to store the user ID of the owner of an item.
-        user: Make  a one-to-one relationship to the User class.
+        user: Make a one-to-one relationship to the User class.
     """
     __tablename__ = 'item'
 
