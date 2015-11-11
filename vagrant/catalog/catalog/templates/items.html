@@ -11,8 +11,11 @@
         <h2>{{ category.name }} (1 animal)</h2>
         {% endif %}
         {% for item in items %}
-        <p><a href="#">{{ item.name }}</a></p>
+        <p>
+            <a href="{{ url_for('show_item', category_name=category.name, item_name=item.name) }}">
+                {{ item.name }}</a>
+        </p>
         {% endfor %}
     {% endif %}
-    <p><a href="#">Add new animal</a></p>
+    <p><a href="{{ url_for('create_item') }}">Add new animal</a></p>
 {% endblock %}
