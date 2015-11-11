@@ -5,7 +5,7 @@
 </head>
 
 <body>
-    <h1>ZooMA - Zoo Management App</h1>
+    <h1><a href="/">ZooMA - Zoo Management App</a></h1>
     <h2>Categories</h2>
     {% for category in categories %}
     <p><a href="{{ url_for('show_items', category_name=category.name) }}">{{ category.name }}</a></p>
