@@ -42,6 +42,16 @@ class Category(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(100), nullable=False)
+    items = relationship('Item')
+
+    @property
+    def serialise(self):
+        # Returns category data in an easily serialiseable format.
+        return {
+            'id' : self.id,
+            'name' : self.name,
+            'Item' : [i.serialise for i in self.items]
+        }
 
 
 class Item(Base):
@@ -69,6 +79,16 @@ class Item(Base):
 
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
+
+    @property
+    def serialise(self):
+        # Returns item data in an easily serialiseable format
+        return {
+            'id' : self.id,
+            'cat_id' : self.category_id,
+            'title' : self.name,
+            'description' : self.description
+        }
 
 
 def create_db():
