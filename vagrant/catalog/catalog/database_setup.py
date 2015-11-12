@@ -88,7 +88,7 @@ class Item(Base):
         return {
             'id' : self.id,
             'cat_id' : self.category_id,
-            'title' : self.name,
+            'name' : self.name,
             'description' : self.description
         }
 
