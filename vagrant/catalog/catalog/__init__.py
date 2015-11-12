@@ -14,3 +14,4 @@ session = DBSession()
 
 import catalog.views
 import catalog.json
+import catalog.xml_generator
