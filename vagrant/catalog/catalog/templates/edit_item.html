@@ -2,7 +2,7 @@
 {% block title %}Edit Animal{% endblock %}
 {% block content %}
     <h2>Edit Animal</h2>
-    <form action="{{ url_for('edit_item', item_name=item.name) }}" method="post">
+    <form action="{{ url_for('edit_item', item_name=item.name) }}" method="post"  enctype="multipart/form-data">
         <p>Name</p>
         <input type="text" size="30" name="name" value="{{ item.name }}">
         <p>Description</p>
@@ -17,7 +17,14 @@
             {% endif %}
             {% endfor %}
         </select>
-
+        {% if item.image_filename is none %}
+        <p>Select an image to upload <em>(jpg, png, gif, 4 MB max size)</em>: <input type="file" name="file"></p>
+        {% else %}
+        <p>Image</p>
+        <img src="{{ url_for('show_item_image', filename=item.image_filename) }}">
+        <p>Select a different image to upload <em>(jpg, png, gif, 4 MB max size)</em>: <input type="file" name="file"></p>
+        <p><input type="checkbox" name="delete_image" value="delete">Delete the current image.</p>
+        {% endif %}
         <input type="submit" value="Save">
         <a href="{{ url_for('show_item', category_name=item.category.name, item_name=item.name) }}">Cancel</a>
     </form>

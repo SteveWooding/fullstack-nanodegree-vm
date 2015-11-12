@@ -2,14 +2,26 @@
 import os
 from flask import render_template, request, redirect, url_for
 from flask import send_from_directory
+from werkzeug import secure_filename
 from sqlalchemy import desc, literal
 from sqlalchemy.orm.exc import NoResultFound
 
 from catalog import app, session, ALLOWED_EXTENSIONS
 from database_setup import Category, Item
 
+
 def allowed_file(filename):
+    """Check if the filename has one of the allowed extensions."""
     return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+
+def delete_image(filename):
+    """Delete an item image file from the filesystem."""
+    try:
+        os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    except OSError:
+        print "Error deleting image file %s" % filename
+
 
 @app.route('/')
 @app.route('/catalog/')
@@ -87,8 +99,7 @@ def create_item():
         # Process optional item image
         file = request.files['file']
         if file and allowed_file(file.filename):
-            file_extension = file.filename.rsplit('.', 1)[1]
-            filename = new_item.name.replace(' ', '_') + '.' + file_extension
+            filename = secure_filename(file.filename)
             if os.path.isdir(app.config['UPLOAD_FOLDER']) is False:
                 os.mkdir(app.config['UPLOAD_FOLDER'])
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -123,6 +134,23 @@ def edit_item(item_name):
             item.name = request.form['name']
         item.description = request.form['description']
 
+        # Process optional item image
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            if item.image_filename:
+                delete_image(item.image_filename)
+            filename = secure_filename(file.filename)
+            if os.path.isdir(app.config['UPLOAD_FOLDER']) is False:
+                os.mkdir(app.config['UPLOAD_FOLDER'])
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            item.image_filename = filename
+
+        elif request.form['delete_image'] == 'delete':
+            if item.image_filename:
+                delete_image(item.image_filename)
+                item.image_filename = None
+
         session.add(item)
         session.commit()
 
@@ -144,6 +172,8 @@ def delete_item(item_name):
         return "The item '%s' does not exist." % item_name
 
     if request.method == 'POST':
+        if item.image_filename:
+            delete_image(item.image_filename)
         session.delete(item)
         session.commit()
         category = session.query(Category).filter_by(id=item.category_id).one()
