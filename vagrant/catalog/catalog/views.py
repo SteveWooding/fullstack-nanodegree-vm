@@ -1,11 +1,15 @@
 """Defines the views to be presented to the user."""
+import os
 from flask import render_template, request, redirect, url_for
+from flask import send_from_directory
 from sqlalchemy import desc, literal
 from sqlalchemy.orm.exc import NoResultFound
 
-from catalog import app, session
+from catalog import app, session, ALLOWED_EXTENSIONS
 from database_setup import Category, Item
 
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 @app.route('/')
 @app.route('/catalog/')
@@ -79,6 +83,17 @@ def create_item():
         new_item = Item(category=category,
                         name=request.form['name'],
                         description=request.form['description'])
+
+        # Process optional item image
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            file_extension = file.filename.rsplit('.', 1)[1]
+            filename = new_item.name.replace(' ', '_') + '.' + file_extension
+            if os.path.isdir(app.config['UPLOAD_FOLDER']) is False:
+                os.mkdir(app.config['UPLOAD_FOLDER'])
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            new_item.image_filename = filename
+
         session.add(new_item)
         session.commit()
         return redirect(url_for('show_homepage'))
@@ -138,3 +153,8 @@ def delete_item(item_name):
         return render_template('delete_item.html',
                                categories=categories,
                                item=item)
+
+
+@app.route('/item_images/<filename>')
+def show_item_image(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
