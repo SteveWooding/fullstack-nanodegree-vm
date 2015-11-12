@@ -2,7 +2,7 @@
 {% block title %}New Animal{% endblock %}
 {% block content %}
     <h2>Add New Animal</h2>
-    <form action="{{ url_for('create_item') }}" method="post">
+    <form action="{{ url_for('create_item') }}" method="post" enctype="multipart/form-data">
         <p>Name</p>
         <input type="text" size="30" name="name">
         <p>Description</p>
@@ -13,6 +13,8 @@
             <option value="{{ category.name }}">{{ category.name }}</option>
             {% endfor %}
         </select>
+        <p>Upload an image of the animal <em>(optional)</em></p>
+        <p>Select a image file <em>(jpg, png, gif, 4 MB max size)</em>: <input type="file" name="file"></p>
 
         <input type="submit" value="Create">
         <a href="{{ url_for('show_homepage') }}">Cancel</a>
