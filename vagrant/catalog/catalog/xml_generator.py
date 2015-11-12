@@ -22,6 +22,7 @@ def items_xml():
                              {'id':str(category.id), 'name':category.name})
 
         items = session.query(Item).filter_by(category=category).all()
+
         for item in items:
             item_tag = SubElement(cat_tag, 'item', {'id':str(item.id)})
             name_tag = SubElement(item_tag, 'name')
@@ -29,4 +30,5 @@ def items_xml():
             desc_tag = SubElement(item_tag, 'description')
             desc_tag.text = item.description
 
-    return parseString(tostring(root)).toprettyxml(indent='  ')
+    # Return the XML with a 2 space indent to make it more human readable.
+    return parseString(tostring(root, 'utf-8')).toprettyxml(indent='  ')
