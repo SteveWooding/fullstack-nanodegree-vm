@@ -3,6 +3,9 @@
 {% block content %}
     <h2>{{ item.name }}</h2>
     <p>{{ item.description }}</p>
+    {% if item.image_filename is string %}
+    <img src="{{ url_for('show_item_image', filename=item.image_filename) }}">
+    {% endif %}
     <p><a href="{{ url_for('edit_item', item_name=item.name) }}">Edit</a>
         | <a href="{{ url_for('delete_item', item_name=item.name) }}">Delete</a></p>
 {% endblock %}
