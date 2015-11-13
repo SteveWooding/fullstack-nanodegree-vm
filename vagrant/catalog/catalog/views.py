@@ -44,7 +44,8 @@ def show_items(category_name):
         return "The category '%s' does not exist." % category_name
 
     categories = session.query(Category).all()
-    items = session.query(Item).filter_by(category=category).all()
+    items = (session.query(Item).filter_by(category=category).
+             order_by(Item.name).all())
     return render_template('items.html',
                            categories=categories,
                            category=category,
