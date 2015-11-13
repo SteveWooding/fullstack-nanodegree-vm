@@ -58,7 +58,8 @@ def populate_database():
             "largely within the Arctic Circle, encompassing the Arctic Ocean, "
             "its surrounding seas and surrounding land masses. It is a large "
             "bear, approximately the same size as the omnivorous Kodiak bear."
-        )
+        ),
+        image_url = "https://upload.wikimedia.org/wikipedia/commons/6/66/Polar_Bear_-_Alaska_(cropped).jpg"
     )
     session.add(item1)
     session.commit()
