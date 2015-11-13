@@ -74,7 +74,9 @@ def populate_database():
             "African elephant and the Asian elephant, although some evidence "
             "suggests that African bush elephants and African forest elephants "
             "are separate species."
-        )
+        ),
+        image_url = "http://res.freestockphotos.biz/pictures/10/10004-an-elephant-in-the-wild-pv.jpg"
+
     )
     session.add(item2)
     session.commit()
@@ -90,7 +92,8 @@ def populate_database():
             "kingfisher. All have large heads, long, sharp, pointed bills, "
             "short legs, and stubby tails. Most species have bright plumage "
             "with little differences between the sexes."
-        )
+        ),
+        image_url = "https://upload.wikimedia.org/wikipedia/commons/d/de/Common_Kingfisher_(Alcedo_atthis_taprobana)_-_Male_-_Flickr_-_Lip_Kee.jpg"
     )
     session.add(item3)
     session.commit()
@@ -104,7 +107,8 @@ def populate_database():
             "Paridae. The bird is easily recognisable by its blue and yellow "
             "plumage, but various authorities dispute their scientific "
             "classification."
-        )
+        ),
+        image_url = "https://upload.wikimedia.org/wikipedia/commons/6/65/Blue_Tit_-_flickr.jpg"
     )
     session.add(item4)
     session.commit()
@@ -120,7 +124,8 @@ def populate_database():
             "bill. They are a popular sport fish of the billfish category, "
             "though elusive. Swordfish are elongated, round-bodied, and lose "
             "all teeth and scales by adulthood."
-        )
+        ),
+        image_url = "https://upload.wikimedia.org/wikipedia/commons/f/f6/Xiphias_gladius2.jpg"
     )
     session.add(item5)
     session.commit()
@@ -137,7 +142,8 @@ def populate_database():
             "considerably larger whale sharks exist. Claims of individuals "
             "over 14 m (46 ft) long and weighing at least 30 metric tons "
             "(66,000 lb) are not uncommon."
-        )
+        ),
+        image_url = "https://upload.wikimedia.org/wikipedia/en/7/78/Whaleshark.jpg"
     )
     session.add(item6)
     session.commit()
@@ -155,7 +161,8 @@ def populate_database():
             "male saltwater crocodile is generally between 4.3 and 5.2 m (14 "
             "and 17 ft) in length and weighs 400 to 1,000 kg (880-2,200 lb), "
             "rarely growing larger."
-        )
+        ),
+        image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Saltwater_crocodile.jpg/640px-Saltwater_crocodile.jpg"
     )
     session.add(item7)
     session.commit()
@@ -171,7 +178,8 @@ def populate_database():
             "and subtropic areas of South and Southeast Asia. Until 2009, it "
             "was considered a subspecies of Python molurus, but now is "
             "recognized as belonging to a distinct species."
-        )
+        ),
+        image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Burmese_Python_02.jpg/640px-Burmese_Python_02.jpg"
     )
     session.add(item8)
     session.commit()
@@ -188,7 +196,8 @@ def populate_database():
             "the rainforest with high rain rates (5 m or more per year), "
             "altitudes between 100 and 200 m, temperatures of at least 26C, "
             "and relative humidity of 80-90%."
-        )
+        ),
+        image_url = "https://upload.wikimedia.org/wikipedia/commons/9/9a/Phyllobates_terribilis_climbing_on_leaves.png"
     )
     session.add(item9)
     session.commit()
@@ -205,7 +214,8 @@ def populate_database():
             "internal viscera, including the heart, liver, and "
             "gastrointestinal tract, are visible through the skin, hence the "
             "common name."
-        )
+        ),
+        image_url = "https://c1.staticflickr.com/7/6143/5991036083_b2a7f8d894_b.jpg"
     )
     session.add(item10)
     session.commit()
@@ -219,7 +229,8 @@ def populate_database():
             "Fire ant is the common name for several species of ants in the "
             "genus Solenopsis. They are however only a minority in the genus, "
             "which includes over 200 species of Solenopsis worldwide."
-        )
+        ),
+        image_url = "https://c2.staticflickr.com/4/3614/3469703353_9020c24f36.jpg"
     )
     session.add(item11)
     session.commit()
@@ -233,7 +244,8 @@ def populate_database():
             "family Papilionidae, and include over 550 species. Though the "
             "majority are tropical, members of the family inhabit every "
             "continent except Antarctica."
-        )
+        ),
+        image_url = "https://upload.wikimedia.org/wikipedia/commons/f/fe/Swallowtail_Butterfly_(Papilio_machaon)_-_geograph.org.uk_-_854088.jpg"
     )
     session.add(item12)
     session.commit()
