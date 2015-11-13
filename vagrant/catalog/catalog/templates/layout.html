@@ -6,6 +6,15 @@
 
 <body>
     <h1><a href="/">ZooMA - Zoo Management App</a></h1>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flash_msg">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
     <h2>Categories</h2>
     {% for category in categories %}
     <p><a href="{{ url_for('show_items', category_name=category.name) }}">{{ category.name }}</a></p>

@@ -1,6 +1,6 @@
 """Defines the views to be presented to the user."""
 import os
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, flash
 from flask import send_from_directory
 from werkzeug import secure_filename
 from sqlalchemy import desc, literal
@@ -40,8 +40,8 @@ def show_items(category_name):
     try:
         category = session.query(Category).filter_by(name=category_name).one()
     except NoResultFound:
-        # TODO Make this a flash message
-        return "The category '%s' does not exist." % category_name
+        flash("The category '%s' does not exist." % category_name)
+        return redirect(url_for('show_homepage'))
 
     categories = session.query(Category).all()
     items = (session.query(Item).filter_by(category=category).
@@ -58,14 +58,14 @@ def show_item(category_name, item_name):
     try:
         category = session.query(Category).filter_by(name=category_name).one()
     except NoResultFound:
-        # TODO Make this a flash message on homepage.
-        return "The category '%s' does not exist." % category_name
+        flash("The category '%s' does not exist." % category_name)
+        return redirect(url_for('show_homepage'))
 
     try:
         item = session.query(Item).filter_by(name=item_name).one()
     except NoResultFound:
-        # TODO Make this a flash message on homepage.
-        return "The item '%s' does not exist." % item_name
+        flash("The item '%s' does not exist." % item_name)
+        return redirect(url_for('show_items', category_name=category_name))
 
     categories = session.query(Category).all()
     return render_template('item.html',
@@ -79,21 +79,22 @@ def create_item():
     """Allow users to create a new item in the catalog."""
     if request.method == 'POST':
         if not request.form['name']:
-            # TODO Replace with flash message.
-            return "No name provided."
+            flash("New animal not created: No name provided.")
+            return redirect(url_for('show_homepage'))
 
         if request.form['name'] == "items":
             # Can't have an item called "items" as this is a route.
             # TODO Replace with flash message.
-            return "Can't have an item called 'items'."
+            flash("New animal not created: Can't have an animal called 'items'.")
+            return redirect(url_for('show_homepage'))
 
         # Enforce rule that item names are unique
         qry = session.query(Item).filter(Item.name == request.form['name'])
         already_exists = session.query(literal(True)).filter(qry.exists()).scalar()
         if already_exists is True:
-            # TODO Replace with flash message.
-            return ("There is already an animal with the name '%s'"
-                    % request.form['name'])
+            flash("Error: There is already an animal with the name '%s'"
+                  % request.form['name'])
+            return redirect(url_for('show_homepage'))
 
         category = (session.query(Category)
                     .filter_by(name=request.form['category']).one())
@@ -115,6 +116,8 @@ def create_item():
 
         session.add(new_item)
         session.commit()
+
+        flash("New animal successfully created!")
         return redirect(url_for('show_item',
                                 category_name=category.name,
                                 item_name=new_item.name))
@@ -140,26 +143,28 @@ def edit_item(item_name):
     try:
         item = session.query(Item).filter_by(name=item_name).one()
     except NoResultFound:
-        # TODO Make this a flash message on homepage.
-        return "The item '%s' does not exist." % item_name
+        flash("Error: The item '%s' does not exist." % item_name)
+        return redirect(url_for('show_homepage'))
 
     if request.method == 'POST':
-        form_category = (session.query(Category)
-                         .filter_by(name=request.form['category']).one())
-
-        if form_category != item.category:
-            item.category = form_category
-
         if request.form['name'] != item.name:
             # Enforce rule that item names are unique
             qry = session.query(Item).filter(Item.name == request.form['name'])
-            already_exists = session.query(literal(True)).filter(qry.exists()).scalar()
+            already_exists = (session.query(literal(True)).filter(qry.exists())
+                              .scalar())
             if already_exists is True:
-                # TODO Replace with flash message.
-                return ("There is already an animal with the name '%s'"
-                        % request.form['name'])
-
+                original_category = (session.query(Category)
+                                     .filter_by(id=item.category_id).one())
+                flash("Error: There is already an animal with the name '%s'"
+                      % request.form['name'])
+                return redirect(url_for('show_items',
+                                        category_name=original_category.name))
             item.name = request.form['name']
+
+        form_category = (session.query(Category)
+                         .filter_by(name=request.form['category']).one())
+        if form_category != item.category:
+            item.category = form_category
 
         item.description = request.form['description']
 
@@ -191,6 +196,7 @@ def edit_item(item_name):
         session.add(item)
         session.commit()
 
+        flash("Animal successfully edited!")
         return redirect(url_for('show_item',
                                 category_name=form_category.name,
                                 item_name=item.name))
@@ -207,8 +213,8 @@ def delete_item(item_name):
     try:
         item = session.query(Item).filter_by(name=item_name).one()
     except NoResultFound:
-        # TODO Make this a flash message on homepage.
-        return "The item '%s' does not exist." % item_name
+        flash("Error: The item '%s' does not exist." % item_name)
+        return redirect(url_for('show_homepage'))
 
     if request.method == 'POST':
         if item.image_filename:
@@ -216,6 +222,8 @@ def delete_item(item_name):
         session.delete(item)
         session.commit()
         category = session.query(Category).filter_by(id=item.category_id).one()
+
+        flash("Animal successfully deleted!")
         return redirect(url_for('show_items', category_name=category.name))
     else:
         categories = session.query(Category).all()
@@ -226,4 +234,5 @@ def delete_item(item_name):
 
 @app.route('/item_images/<filename>')
 def show_item_image(filename):
+    """Route to serve user uploaded images."""
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)

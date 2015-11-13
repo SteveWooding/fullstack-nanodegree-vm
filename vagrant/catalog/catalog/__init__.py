@@ -10,7 +10,8 @@ ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png', 'gif'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024  # 4MB
+app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024  # 4 MB
+app.secret_key = 'super_secret_key'  # This needs changing in production env.
 
 # Connect to the database
 engine = create_engine('sqlite:///itemcatalog.db')
