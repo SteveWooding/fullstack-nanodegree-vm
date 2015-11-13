@@ -136,8 +136,17 @@ def edit_item(item_name):
         if form_category != item.category:
             item.category = form_category
 
-        if request.form['name']:
+        if request.form['name'] != item.name:
+            # Enforce rule that item names are unique
+            qry = session.query(Item).filter(Item.name == request.form['name'])
+            already_exists = session.query(literal(True)).filter(qry.exists()).scalar()
+            if already_exists is True:
+                # TODO Replace with flash message.
+                return ("There is already an animal with the name '%s'"
+                        % request.form['name'])
+
             item.name = request.form['name']
+
         item.description = request.form['description']
 
         # Process optional item image
