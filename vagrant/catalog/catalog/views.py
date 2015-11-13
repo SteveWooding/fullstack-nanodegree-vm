@@ -107,7 +107,9 @@ def create_item():
 
         session.add(new_item)
         session.commit()
-        return redirect(url_for('show_homepage'))
+        return redirect(url_for('show_item',
+                                category_name=category.name,
+                                item_name=new_item.name))
     else:
         categories = session.query(Category).all()
         return render_template('new_item.html',
@@ -146,7 +148,8 @@ def edit_item(item_name):
 
             item.image_filename = filename
 
-        elif request.form['delete_image'] == 'delete':
+        elif ('delete_image' in request.form and
+              request.form['delete_image'] == 'delete'):
             if item.image_filename:
                 delete_image(item.image_filename)
                 item.image_filename = None
@@ -154,7 +157,9 @@ def edit_item(item_name):
         session.add(item)
         session.commit()
 
-        return redirect(url_for('show_items', category_name=form_category.name))
+        return redirect(url_for('show_item',
+                                category_name=form_category.name,
+                                item_name=item.name))
     else:
         categories = session.query(Category).all()
         return render_template('edit_item.html',
