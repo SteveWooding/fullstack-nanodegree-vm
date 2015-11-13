@@ -10,7 +10,11 @@
         <p>Category</p>
         <select name="category">
             {% for category in categories %}
-            <option value="{{ category.name }}">{{ category.name }}</option>
+                {% if category.name == ref_category %}
+                <option value="{{ category.name }}" selected>{{ category.name }}</option>
+                {% else %}
+                <option value="{{ category.name }}">{{ category.name }}</option>
+                {% endif %}
             {% endfor %}
         </select>
         <p>Upload an image of the animal <em>(optional)</em></p>

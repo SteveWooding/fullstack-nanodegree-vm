@@ -119,8 +119,18 @@ def create_item():
                                 item_name=new_item.name))
     else:
         categories = session.query(Category).all()
+
+        # See, if any, which category page new item was click on.
+        ref_category = None
+        if 'catalog' in request.referrer:
+            ref_url_elements = request.referrer.split('/')
+            if len(ref_url_elements) > 5:
+                ref_category = ref_url_elements[4]
+                print ref_category
+
         return render_template('new_item.html',
-                               categories=categories)
+                               categories=categories,
+                               ref_category=ref_category)
 
 
 @app.route('/catalog/<item_name>/edit/', methods=['GET', 'POST'])
