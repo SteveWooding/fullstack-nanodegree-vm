@@ -17,15 +17,32 @@
             {% endif %}
             {% endfor %}
         </select>
-        {% if item.image_filename is none %}
+        {% if item.image_filename is none and item.image_url is none %}
         <p>Select an image to upload <em>(jpg, png, gif, 4 MB max size)</em>: <input type="file" name="file"></p>
         {% else %}
         <p>Image</p>
-        <img src="{{ url_for('show_item_image', filename=item.image_filename) }}">
-        <p>Select a different image to upload <em>(jpg, png, gif, 4 MB max size)</em>: <input type="file" name="file"></p>
-        <p><input type="checkbox" name="delete_image" value="delete">Delete the current image.</p>
+            {% if item.image_filename %}
+            <figure>
+                <img src="{{ url_for('show_item_image', filename=item.image_filename) }}">
+                <figcaption>Uploaded image filename: {{ item.image_filename }}</figcaption>
+            </figure>
+            <p>Select a different image to upload <em>(jpg, png, gif, 4 MB max size)</em>: <input type="file" name="file"></p>
+            <p><input type="checkbox" name="delete_image" value="delete">Delete the current image.</p>
+            {% else %}
+            <figure>
+                <img src="{{ item.image_url }}">
+                <figcaption>Linked image URL: {{ item.image_url }}</figcaption>
+            </figure>
+            <p>Select a different image to upload <em>(jpg, png, gif, 4 MB max size)</em>: <input type="file" name="file"></p>
+            {% endif %}
         {% endif %}
+        <p>Or supply a link to an image on the web <em>(an upload will be used if supplied)</em></p>
+        <input type="text" size="60" name="image_url" placeholder="http://www.domainname.com/image.jpg">
+
+
+        <p>
         <input type="submit" value="Save">
         <a href="{{ url_for('show_item', category_name=item.category.name, item_name=item.name) }}">Cancel</a>
+        </p>
     </form>
 {% endblock %}

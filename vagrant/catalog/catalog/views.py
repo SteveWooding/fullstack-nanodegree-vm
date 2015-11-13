@@ -163,9 +163,16 @@ def edit_item(item_name):
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
             item.image_filename = filename
+            item.image_url = None
 
         elif ('delete_image' in request.form and
               request.form['delete_image'] == 'delete'):
+            if item.image_filename:
+                delete_image(item.image_filename)
+                item.image_filename = None
+
+        if not file and request.form['image_url']:
+            item.image_url = request.form['image_url']
             if item.image_filename:
                 delete_image(item.image_filename)
                 item.image_filename = None
