@@ -77,6 +77,10 @@ def show_item(category_name, item_name):
 def create_item():
     """Allow users to create a new item in the catalog."""
     if request.method == 'POST':
+        if not request.form['name']:
+            # TODO Replace with flash message.
+            return "No name provided."
+
         if request.form['name'] == "items":
             # Can't have an item called "items" as this is a route.
             # TODO Replace with flash message.
