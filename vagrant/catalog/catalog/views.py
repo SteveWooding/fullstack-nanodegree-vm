@@ -109,6 +109,9 @@ def create_item():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             new_item.image_filename = filename
 
+        elif request.form['image_url']:
+            new_item.image_url = request.form['image_url']
+
         session.add(new_item)
         session.commit()
         return redirect(url_for('show_item',
