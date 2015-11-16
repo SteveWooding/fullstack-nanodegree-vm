@@ -104,7 +104,8 @@ def create_item():
                     .filter_by(name=request.form['category']).one())
         new_item = Item(category=category,
                         name=request.form['name'],
-                        description=request.form['description'])
+                        description=request.form['description'],
+                        user_id=login_session['user_id'])
 
         # Process optional item image
         file = request.files['file']
@@ -134,7 +135,6 @@ def create_item():
             ref_url_elements = request.referrer.split('/')
             if len(ref_url_elements) > 5:
                 ref_category = ref_url_elements[4]
-                print ref_category
 
         return render_template('new_item.html',
                                categories=categories,
@@ -152,6 +152,13 @@ def edit_item(item_name):
     except NoResultFound:
         flash("Error: The item '%s' does not exist." % item_name)
         return redirect(url_for('show_homepage'))
+
+    if login_session['user_id'] != item.user_id:
+        flash("You didn't add this animal, so you can't edit it. Sorry :-(")
+        category = session.query(Category).filter_by(id=item.category_id).one()
+        return redirect(url_for('show_item',
+                                category_name=category.name,
+                                item_name=item.name))
 
     if request.method == 'POST':
         if request.form['name'] != item.name:
@@ -219,12 +226,19 @@ def delete_item(item_name):
     """Delete a specified item from the database."""
     if 'username' not in login_session:
         return redirect('/login')
-        
+
     try:
         item = session.query(Item).filter_by(name=item_name).one()
     except NoResultFound:
         flash("Error: The item '%s' does not exist." % item_name)
         return redirect(url_for('show_homepage'))
+
+    if login_session['user_id'] != item.user_id:
+        flash("You didn't add this animal, so you can't delete it. Sorry :-(")
+        category = session.query(Category).filter_by(id=item.category_id).one()
+        return redirect(url_for('show_item',
+                                category_name=category.name,
+                                item_name=item.name))
 
     if request.method == 'POST':
         if item.image_filename:
