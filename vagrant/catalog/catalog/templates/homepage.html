@@ -8,5 +8,7 @@
        <em>({{ item.category.name }})</em>
     </p>
     {% endfor %}
+    {% if 'username' in session %}
     <p><a href="{{ url_for('create_item') }}">Add new animal</a></p>
+    {% endif %}
 {% endblock %}
