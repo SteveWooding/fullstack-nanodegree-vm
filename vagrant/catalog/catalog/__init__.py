@@ -20,5 +20,6 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 import catalog.views
-import catalog.json
+import catalog.json_endpoint
 import catalog.xml_generator
+import catalog.auth
