@@ -2,6 +2,7 @@
 import os
 from flask import render_template, request, redirect, url_for, flash
 from flask import send_from_directory
+from flask import session as login_session
 from werkzeug import secure_filename
 from sqlalchemy import desc, literal
 from sqlalchemy.orm.exc import NoResultFound
@@ -77,6 +78,9 @@ def show_item(category_name, item_name):
 @app.route('/catalog/new/', methods=['GET', 'POST'])
 def create_item():
     """Allow users to create a new item in the catalog."""
+    if 'username' not in login_session:
+        return redirect('/login')
+
     if request.method == 'POST':
         if not request.form['name']:
             flash("New animal not created: No name provided.")
@@ -140,6 +144,9 @@ def create_item():
 @app.route('/catalog/<item_name>/edit/', methods=['GET', 'POST'])
 def edit_item(item_name):
     """Edit the details of the specified item."""
+    if 'username' not in login_session:
+        return redirect('/login')
+
     try:
         item = session.query(Item).filter_by(name=item_name).one()
     except NoResultFound:
@@ -210,6 +217,9 @@ def edit_item(item_name):
 @app.route('/catalog/<item_name>/delete/', methods=['GET','POST'])
 def delete_item(item_name):
     """Delete a specified item from the database."""
+    if 'username' not in login_session:
+        return redirect('/login')
+        
     try:
         item = session.query(Item).filter_by(name=item_name).one()
     except NoResultFound:
