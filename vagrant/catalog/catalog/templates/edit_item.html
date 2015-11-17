@@ -41,8 +41,9 @@
 
 
         <p>
-        <input type="submit" value="Save">
-        <a href="{{ url_for('show_item', category_name=item.category.name, item_name=item.name) }}">Cancel</a>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+            <input type="submit" value="Save">
+            <a href="{{ url_for('show_item', category_name=item.category.name, item_name=item.name) }}">Cancel</a>
         </p>
     </form>
 {% endblock %}

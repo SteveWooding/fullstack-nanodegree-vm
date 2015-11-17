@@ -1,5 +1,6 @@
 """Initialisation for the catalog package."""
 from flask import Flask
+from flask.ext.seasurf import SeaSurf
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -12,6 +13,9 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024  # 4 MB
 app.secret_key = 'super_secret_key'  # This needs changing in production env.
+
+# SeaSurf anti-CSRF Flask extension
+csrf = SeaSurf(app)
 
 # Connect to the database
 engine = create_engine('sqlite:///itemcatalog.db')

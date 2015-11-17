@@ -5,6 +5,21 @@
     </script>
     <script src="https://apis.google.com/js/client:platform.js?onload=start" async defer>
     </script>
+    <script src="{{ url_for('static', filename='js/js.cookie-2.0.4.min.js') }}">
+    </script>
+    <script>
+        // Setup AJAX to add the Cross Site Request Forgery token to requests
+        var csrfToken = Cookies.get('_csrf_token');
+        $.ajaxSetup({
+            beforeSend: function(xhr) {
+                    // Only add the CSRF token if it is
+                    // being sent to the same domain this script is on.
+                    if (!this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrfToken);
+                    }
+                }
+        });
+    </script>
 {% endblock head %}
 {% block content %}
 <!-- Load the Facebook SDK -->

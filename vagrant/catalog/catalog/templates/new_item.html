@@ -23,8 +23,9 @@
         <input type="text" size="60" name="image_url" placeholder="http://www.domainname.com/image.jpg">
 
         <p>
-        <input type="submit" value="Create">
-        <a href="{{ url_for('show_homepage') }}">Cancel</a>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+            <input type="submit" value="Create">
+            <a href="{{ url_for('show_homepage') }}">Cancel</a>
         </p>
     </form>
 {% endblock %}

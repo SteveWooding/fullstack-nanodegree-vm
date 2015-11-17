@@ -4,6 +4,7 @@
     <h2>Delete Animal</h2>
     <form action="{{ url_for('delete_item', item_name=item.name) }}" method="post">
         <p>Are you sure you want to delete the animal {{ item.name }}?</p>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
         <input type="submit" value="Delete">
         <a href="{{ url_for('show_item', category_name=item.category.name, item_name=item.name) }}">Cancel</a>
     </form>
