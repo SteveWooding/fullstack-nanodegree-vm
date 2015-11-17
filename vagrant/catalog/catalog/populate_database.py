@@ -59,6 +59,7 @@ def populate_database():
             "its surrounding seas and surrounding land masses. It is a large "
             "bear, approximately the same size as the omnivorous Kodiak bear."
         ),
+        quantity=3,
         image_url = "https://upload.wikimedia.org/wikipedia/commons/6/66/Polar_Bear_-_Alaska_(cropped).jpg"
     )
     session.add(item1)
@@ -75,6 +76,7 @@ def populate_database():
             "suggests that African bush elephants and African forest elephants "
             "are separate species."
         ),
+        quantity=4,
         image_url = "http://res.freestockphotos.biz/pictures/10/10004-an-elephant-in-the-wild-pv.jpg"
 
     )
@@ -93,6 +95,7 @@ def populate_database():
             "short legs, and stubby tails. Most species have bright plumage "
             "with little differences between the sexes."
         ),
+        quantity=2,
         image_url = "https://upload.wikimedia.org/wikipedia/commons/d/de/Common_Kingfisher_(Alcedo_atthis_taprobana)_-_Male_-_Flickr_-_Lip_Kee.jpg"
     )
     session.add(item3)
@@ -108,6 +111,7 @@ def populate_database():
             "plumage, but various authorities dispute their scientific "
             "classification."
         ),
+        quantity=7,
         image_url = "https://upload.wikimedia.org/wikipedia/commons/6/65/Blue_Tit_-_flickr.jpg"
     )
     session.add(item4)
@@ -125,6 +129,7 @@ def populate_database():
             "though elusive. Swordfish are elongated, round-bodied, and lose "
             "all teeth and scales by adulthood."
         ),
+        quantity=4,
         image_url = "https://upload.wikimedia.org/wikipedia/commons/f/f6/Xiphias_gladius2.jpg"
     )
     session.add(item5)
@@ -143,6 +148,7 @@ def populate_database():
             "over 14 m (46 ft) long and weighing at least 30 metric tons "
             "(66,000 lb) are not uncommon."
         ),
+        quantity=1,
         image_url = "https://upload.wikimedia.org/wikipedia/en/7/78/Whaleshark.jpg"
     )
     session.add(item6)
@@ -162,6 +168,7 @@ def populate_database():
             "and 17 ft) in length and weighs 400 to 1,000 kg (880-2,200 lb), "
             "rarely growing larger."
         ),
+        quantity=2,
         image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Saltwater_crocodile.jpg/640px-Saltwater_crocodile.jpg"
     )
     session.add(item7)
@@ -197,6 +204,7 @@ def populate_database():
             "altitudes between 100 and 200 m, temperatures of at least 26C, "
             "and relative humidity of 80-90%."
         ),
+        quantity=2,
         image_url = "https://upload.wikimedia.org/wikipedia/commons/9/9a/Phyllobates_terribilis_climbing_on_leaves.png"
     )
     session.add(item9)
@@ -215,6 +223,7 @@ def populate_database():
             "gastrointestinal tract, are visible through the skin, hence the "
             "common name."
         ),
+        quantity=4,
         image_url = "https://c1.staticflickr.com/7/6143/5991036083_b2a7f8d894_b.jpg"
     )
     session.add(item10)
@@ -230,6 +239,7 @@ def populate_database():
             "genus Solenopsis. They are however only a minority in the genus, "
             "which includes over 200 species of Solenopsis worldwide."
         ),
+        quantity=200,
         image_url = "https://c2.staticflickr.com/4/3614/3469703353_9020c24f36.jpg"
     )
     session.add(item11)
@@ -245,6 +255,7 @@ def populate_database():
             "majority are tropical, members of the family inhabit every "
             "continent except Antarctica."
         ),
+        quantity=5,
         image_url = "https://upload.wikimedia.org/wikipedia/commons/f/fe/Swallowtail_Butterfly_(Papilio_machaon)_-_geograph.org.uk_-_854088.jpg"
     )
     session.add(item12)
