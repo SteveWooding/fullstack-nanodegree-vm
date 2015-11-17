@@ -64,6 +64,7 @@ class Item(Base):
         id: A column in the database for the item ID.
         name: A column to store the name of the item.
         description: A column to store a description of the item.
+        quantity: Number of items.
         category_id: A column to store the ID of the category that the item
             belongs to.
         category: Makes a one-to-one relationship to the Category class.
@@ -75,6 +76,7 @@ class Item(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
     description = Column(String)
+    quantity = Column(Integer)
     image_filename = Column(String(100))
     image_url = Column(String(250))
 
@@ -91,7 +93,8 @@ class Item(Base):
             'id' : self.id,
             'cat_id' : self.category_id,
             'name' : self.name,
-            'description' : self.description
+            'description' : self.description,
+            'quantity' : self.quantity
         }
 
 
