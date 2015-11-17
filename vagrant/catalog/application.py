@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+"""Main Python script that starts the catalog app.
+
+It checks to see if the database file exists and if not it creates the database
+and populates it with some sample content, for demonstration purposes.
+"""
 import os.path
 
 from catalog import app
