@@ -6,7 +6,9 @@
         <p>Name</p>
         <input type="text" size="30" name="name">
         <p>Description</p>
-        <input type="text" size="30" name="description">
+        <textarea name="description" rows="5" cols="30"></textarea>
+        <p>Zoo Population</p>
+        <input type="number" name="quantity" size="5" min="0" value=1>
         <p>Category</p>
         <select name="category">
             {% for category in categories %}

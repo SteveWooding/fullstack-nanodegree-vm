@@ -6,7 +6,9 @@
         <p>Name</p>
         <input type="text" size="30" name="name" value="{{ item.name }}">
         <p>Description</p>
-        <input type="text" size="30" name="description" value="{{ item.description }}">
+        <textarea name="description" rows="5" cols="30">{{ item.description }}</textarea>
+        <p>Zoo Population</p>
+        <input type="number" name="quantity" size="5" min="0" value="{{ item.quantity }}">
         <p>Category</p>
         <select name="category">
             {% for category in categories %}

@@ -105,6 +105,7 @@ def create_item():
         new_item = Item(category=category,
                         name=request.form['name'],
                         description=request.form['description'],
+                        quantity=request.form['quantity'],
                         user_id=login_session['user_id'])
 
         # Process optional item image
@@ -181,6 +182,7 @@ def edit_item(item_name):
             item.category = form_category
 
         item.description = request.form['description']
+        item.quantity = request.form['quantity']
 
         # Process optional item image
         file = request.files['file']
