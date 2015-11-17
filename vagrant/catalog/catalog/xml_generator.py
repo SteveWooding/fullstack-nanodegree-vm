@@ -2,8 +2,9 @@
 from xml.etree.ElementTree import Element, SubElement, tostring
 from xml.dom.minidom import parseString
 
-from catalog import app, session
+from catalog import app
 from database_setup import Category, Item
+from connect_to_database import connect_to_database
 
 @app.route('/catalog.xml/')
 def items_xml():
@@ -12,6 +13,7 @@ def items_xml():
     Research for this function came from:
         https://pymotw.com/2/xml/etree/ElementTree/create.html
     """
+    session = connect_to_database()
     categories = session.query(Category).all()
 
     root = Element('catalog')
@@ -29,6 +31,8 @@ def items_xml():
             name_tag.text = item.name
             desc_tag = SubElement(item_tag, 'description')
             desc_tag.text = item.description
+
+    session.close()
 
     # Return the XML with a 2 space indent to make it more human readable.
     return parseString(tostring(root, 'utf-8')).toprettyxml(indent='  ')

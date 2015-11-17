@@ -45,7 +45,11 @@
         <p>
             <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
             <input type="submit" value="Save">
-            <a href="{{ url_for('show_item', category_name=item.category.name, item_name=item.name) }}">Cancel</a>
+            {% for category in categories %}
+                {% if item.category_id == category.id %}
+                <a href="{{ url_for('show_item', category_name=category.name, item_name=item.name) }}">Cancel</a>
+                {% endif %}
+            {% endfor %}
         </p>
     </form>
 {% endblock %}

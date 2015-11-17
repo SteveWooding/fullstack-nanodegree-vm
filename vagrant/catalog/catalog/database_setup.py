@@ -98,9 +98,9 @@ class Item(Base):
         }
 
 
-def create_db():
+def create_db(database_url):
     """Create an empty database with the tables defined above."""
-    engine = create_engine('sqlite:///itemcatalog.db')
+    engine = create_engine(database_url)
     Base.metadata.create_all(engine)
     print "Database file itemcatalog.db created..."
 

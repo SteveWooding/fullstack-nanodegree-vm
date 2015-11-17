@@ -3,10 +3,14 @@
 {% block content %}
     <h2>Latest Items</h2>
     {% for item in latest_items %}
-    <p><a href="{{ url_for('show_item', category_name=item.category.name, item_name=item.name) }}">
-        {{ item.name }}</a>
-       <em>({{ item.category.name }})</em>
-    </p>
+        {% for category in categories %}
+            {% if item.category_id == category.id %}
+            <p>
+                <a href="{{ url_for('show_item', category_name=category.name, item_name=item.name) }}">{{ item.name }}</a>
+                <em>({{ category.name }})</em>
+            </p>
+            {% endif %}
+        {% endfor %}
     {% endfor %}
     {% if 'username' in session %}
     <p><a href="{{ url_for('create_item') }}">Add new animal</a></p>

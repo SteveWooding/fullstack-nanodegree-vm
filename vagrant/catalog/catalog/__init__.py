@@ -1,28 +1,20 @@
 """Initialisation for the catalog package."""
 from flask import Flask
 from flask.ext.seasurf import SeaSurf
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 
-from database_setup import Base
+from catalog.database_setup import Base
 
-UPLOAD_FOLDER = '/vagrant/catalog/item_images'
+
 ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png', 'gif'])
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024  # 4 MB
-app.secret_key = 'super_secret_key'  # This needs changing in production env.
 
 # SeaSurf anti-CSRF Flask extension
 csrf = SeaSurf(app)
 
-# Connect to the database
-engine = create_engine('sqlite:///itemcatalog.db')
-Base.metadata.bind = engine
-DBSession = sessionmaker(bind=engine)
-session = DBSession()
 
+# OK to have circular imports here as they are not used in this file.
+# Ref: http://flask.pocoo.org/docs/0.10/patterns/packages/
 import catalog.views
 import catalog.json_endpoint
 import catalog.xml_generator

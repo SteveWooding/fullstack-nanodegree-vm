@@ -9,8 +9,9 @@ import json
 from flask import make_response
 import requests
 
-from catalog import app, session
+from catalog import app
 from database_setup import User, Category
+from connect_to_database import connect_to_database
 
 
 @app.route('/login')
@@ -21,7 +22,9 @@ def show_login():
                     for x in xrange(32))
     login_session['state'] = state
 
+    session = connect_to_database()
     categories = session.query(Category).all()
+    session.close()
 
     return render_template('login.html', STATE=state, categories=categories)
 
@@ -261,22 +264,29 @@ def create_user(login_session):
     new_user = User(name=login_session['username'],
                     email=login_session['email'],
                     picture=login_session['picture'])
+    session = connect_to_database()
     session.add(new_user)
     session.commit()
     user = session.query(User).filter_by(email=login_session['email']).one()
+    session.close()
     return user.id
 
 
 def get_user_info(user_id):
     """Get info for a user from the database."""
+    session = connect_to_database()
     user = session.query(User).filter_by(id=user_id).one()
+    session.close()
     return user
 
 
 def get_user_id(email):
     """Given an email address, return the user ID, if in the database."""
+    session = connect_to_database()
     try:
         user = session.query(User).filter_by(email=email).one()
+        session.close()
         return user.id
     except:
+        session.close()
         return None

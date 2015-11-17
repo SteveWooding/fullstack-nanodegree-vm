@@ -8,11 +8,13 @@ This script should only be run on an empty database.
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from catalog import session
 from database_setup import Base, User, Category, Item
+import connect_to_database
 
 def populate_database():
     """Populate the item catalog database some inital content."""
+    session = connect_to_database()
+
     # Create the six categories animals fall in to.
     category1 = Category(name="Mammals")
     session.add(category1)
