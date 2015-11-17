@@ -7,17 +7,12 @@ This script should only be run on an empty database.
 """
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+
+from catalog import session
 from database_setup import Base, User, Category, Item
 
 def populate_database():
     """Populate the item catalog database some inital content."""
-    # Bind the engine to the metadata of the Base class so that the
-    # declaratives can be accessed through a DBSession instance
-    engine = create_engine('sqlite:///itemcatalog.db')
-    Base.metadata.bind = engine
-    db_session = sessionmaker(bind=engine)
-    session = db_session()
-
     # Create the six categories animals fall in to.
     category1 = Category(name="Mammals")
     session.add(category1)
