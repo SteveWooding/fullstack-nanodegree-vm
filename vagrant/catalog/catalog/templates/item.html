@@ -3,6 +3,9 @@
 {% block content %}
     <h2>{{ item.name }}</h2>
     <p>{{ item.description }}</p>
+    {% if item.quantity != none %}
+    <p>Zoo population: {{ item.quantity }}</p>
+    {% endif %}
     {% if item.image_filename != none %}
     <img src="{{ url_for('show_item_image', filename=item.image_filename) }}">
     {% elif item.image_url != none %}
