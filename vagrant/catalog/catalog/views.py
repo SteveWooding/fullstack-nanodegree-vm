@@ -7,14 +7,14 @@ from werkzeug import secure_filename
 from sqlalchemy import desc, literal
 from sqlalchemy.orm.exc import NoResultFound
 
-from catalog import app, ALLOWED_EXTENSIONS
+from catalog import app
 from database_setup import Category, Item
 from connect_to_database import connect_to_database
 
 
 def allowed_file(filename):
     """Check if the filename has one of the allowed extensions."""
-    return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+    return '.' in filename and filename.rsplit('.', 1)[1] in app.config['ALLOWED_EXTENSIONS']
 
 
 def delete_image(filename):

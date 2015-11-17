@@ -14,6 +14,7 @@ if __name__ == '__main__':
     # App configuration
     app.config['DATABASE_URL'] = 'sqlite:///itemcatalog.db'
     app.config['UPLOAD_FOLDER'] = '/vagrant/catalog/item_images'
+    app.config['ALLOWED_EXTENSIONS'] = set(['jpg', 'jpeg', 'png', 'gif'])
     app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024  # 4 MB
     app.secret_key = 'super_secret_key'  # This needs changing in production env
 
