@@ -159,10 +159,13 @@ def create_item():
                                ref_category=ref_category)
 
 
+@app.route('/catalog/<category_name>/<item_name>/edit/',
+           methods=['GET', 'POST'])
 @app.route('/catalog/<item_name>/edit/', methods=['GET', 'POST'])
-def edit_item(item_name):
+def edit_item(item_name, category_name=None):
     """Edit the details of the specified item."""
     if 'username' not in login_session:
+        flash("You need to login to edit any animals.")
         return redirect('/login')
 
     session = connect_to_database()
@@ -176,10 +179,12 @@ def edit_item(item_name):
     if login_session['user_id'] != item.user_id:
         flash("You didn't add this animal, so you can't edit it. Sorry :-(")
         category = session.query(Category).filter_by(id=item.category_id).one()
+        category_name = category.name
+        item_name = item.name
         session.close()
         return redirect(url_for('show_item',
-                                category_name=category.name,
-                                item_name=item.name))
+                                category_name=category_name,
+                                item_name=item_name))
 
     if request.method == 'POST':
         if request.form['name'] != item.name:
