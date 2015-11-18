@@ -180,6 +180,7 @@ def populate_database():
             "was considered a subspecies of Python molurus, but now is "
             "recognized as belonging to a distinct species."
         ),
+        quantity=2,
         image_url="https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Burmese_Python_02.jpg/640px-Burmese_Python_02.jpg"
     )
     session.add(item8)
