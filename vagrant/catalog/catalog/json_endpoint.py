@@ -1,10 +1,10 @@
 """Defines JSON API endpoints."""
-from flask import jsonify
+from flask import jsonify, redirect, url_for, flash
 from sqlalchemy.orm.exc import NoResultFound
 
 from catalog import app
-from database_setup import Category, Item
-from connect_to_database import connect_to_database
+from catalog.database_setup import Category, Item
+from catalog.connect_to_database import connect_to_database
 
 @app.route('/catalog.json/')
 def items_json():
@@ -25,14 +25,20 @@ def items_json():
 @app.route('/catalog/<category_name>/<item_name>/JSON/')
 @app.route('/catalog/<item_name>/JSON/')
 def item_json(item_name, category_name=None):
-    """Returns a single item in a JSON file."""
+    """Returns a single item in a JSON file.
+
+    Attributes:
+        item_name (str): The name of the item to return in JSON format.
+        category_name (str): A dummy variable used so that the path can
+            optionally include the category name.
+    """
     session = connect_to_database()
     try:
         item = session.query(Item).filter_by(name=item_name).one()
     except NoResultFound:
-        # TODO Make this a flash message on homepage.
         session.close()
-        return "The item '%s' does not exist." % item_name
+        flash("JSON error: The item '%s' does not exist." % item_name)
+        return redirect(url_for('show_homepage'))
 
     session.close()
     return jsonify(Item=item.serialise)

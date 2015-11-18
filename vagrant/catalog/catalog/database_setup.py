@@ -88,7 +88,7 @@ class Item(Base):
 
     @property
     def serialise(self):
-        # Returns item data in an easily serialiseable format
+        """Returns item data in an easily serialiseable format."""
         return {
             'id' : self.id,
             'cat_id' : self.category_id,
@@ -102,8 +102,4 @@ def create_db(database_url):
     """Create an empty database with the tables defined above."""
     engine = create_engine(database_url)
     Base.metadata.create_all(engine)
-    print "Database file itemcatalog.db created..."
-
-
-if __name__ == '__main__':
-    create_db()
+    print "Database file created..."

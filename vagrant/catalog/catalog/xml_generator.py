@@ -3,8 +3,8 @@ from xml.etree.ElementTree import Element, SubElement, tostring
 from xml.dom.minidom import parseString
 
 from catalog import app
-from database_setup import Category, Item
-from connect_to_database import connect_to_database
+from catalog.database_setup import Category, Item
+from catalog.connect_to_database import connect_to_database
 
 @app.route('/catalog.xml/')
 def items_xml():

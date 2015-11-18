@@ -8,13 +8,14 @@ from sqlalchemy import desc, literal
 from sqlalchemy.orm.exc import NoResultFound
 
 from catalog import app
-from database_setup import Category, Item
-from connect_to_database import connect_to_database
+from catalog.database_setup import Category, Item
+from catalog.connect_to_database import connect_to_database
 
 
 def allowed_file(filename):
     """Check if the filename has one of the allowed extensions."""
-    return '.' in filename and filename.rsplit('.', 1)[1] in app.config['ALLOWED_EXTENSIONS']
+    return ('.' in filename and filename.rsplit('.', 1)[1] in
+            app.config['ALLOWED_EXTENSIONS'])
 
 
 def delete_image(filename):
@@ -99,13 +100,13 @@ def create_item():
 
         if request.form['name'] == "items":
             # Can't have an item called "items" as this is a route.
-            # TODO Replace with flash message.
-            flash("New animal not created: Can't have an animal called 'items'.")
+            flash("Error: Can't have an animal called 'items'.")
             return redirect(url_for('show_homepage'))
 
         # Enforce rule that item names are unique
         qry = session.query(Item).filter(Item.name == request.form['name'])
-        already_exists = session.query(literal(True)).filter(qry.exists()).scalar()
+        already_exists = (session.query(literal(True)).
+                          filter(qry.exists()).scalar())
         if already_exists is True:
             flash("Error: There is already an animal with the name '%s'"
                   % request.form['name'])
@@ -121,12 +122,12 @@ def create_item():
                         user_id=login_session['user_id'])
 
         # Process optional item image
-        file = request.files['file']
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
+        image_file = request.files['file']
+        if image_file and allowed_file(image_file.filename):
+            filename = secure_filename(image_file.filename)
             if os.path.isdir(app.config['UPLOAD_FOLDER']) is False:
                 os.mkdir(app.config['UPLOAD_FOLDER'])
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            image_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             new_item.image_filename = filename
 
         elif request.form['image_url']:
@@ -205,14 +206,14 @@ def edit_item(item_name):
         item.quantity = request.form['quantity']
 
         # Process optional item image
-        file = request.files['file']
-        if file and allowed_file(file.filename):
+        image_file = request.files['file']
+        if image_file and allowed_file(image_file.filename):
             if item.image_filename:
                 delete_image(item.image_filename)
-            filename = secure_filename(file.filename)
+            filename = secure_filename(image_file.filename)
             if os.path.isdir(app.config['UPLOAD_FOLDER']) is False:
                 os.mkdir(app.config['UPLOAD_FOLDER'])
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            image_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
             item.image_filename = filename
             item.image_url = None
@@ -223,7 +224,7 @@ def edit_item(item_name):
                 delete_image(item.image_filename)
                 item.image_filename = None
 
-        if not file and request.form['image_url']:
+        if not image_file and request.form['image_url']:
             item.image_url = request.form['image_url']
             if item.image_filename:
                 delete_image(item.image_filename)
@@ -247,7 +248,7 @@ def edit_item(item_name):
                                item=item)
 
 
-@app.route('/catalog/<item_name>/delete/', methods=['GET','POST'])
+@app.route('/catalog/<item_name>/delete/', methods=['GET', 'POST'])
 def delete_item(item_name):
     """Delete a specified item from the database."""
     if 'username' not in login_session:

@@ -5,11 +5,8 @@ created and some animals are created in each category.
 
 This script should only be run on an empty database.
 """
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-
-from database_setup import Base, User, Category, Item
-import connect_to_database
+from catalog.database_setup import User, Category, Item
+from catalog.connect_to_database import connect_to_database
 
 def populate_database():
     """Populate the item catalog database some inital content."""
@@ -57,7 +54,7 @@ def populate_database():
             "bear, approximately the same size as the omnivorous Kodiak bear."
         ),
         quantity=3,
-        image_url = "https://upload.wikimedia.org/wikipedia/commons/6/66/Polar_Bear_-_Alaska_(cropped).jpg"
+        image_url="https://upload.wikimedia.org/wikipedia/commons/6/66/Polar_Bear_-_Alaska_(cropped).jpg"
     )
     session.add(item1)
     session.commit()
@@ -74,7 +71,7 @@ def populate_database():
             "are separate species."
         ),
         quantity=4,
-        image_url = "http://res.freestockphotos.biz/pictures/10/10004-an-elephant-in-the-wild-pv.jpg"
+        image_url="http://res.freestockphotos.biz/pictures/10/10004-an-elephant-in-the-wild-pv.jpg"
 
     )
     session.add(item2)
@@ -93,7 +90,7 @@ def populate_database():
             "with little differences between the sexes."
         ),
         quantity=2,
-        image_url = "https://upload.wikimedia.org/wikipedia/commons/d/de/Common_Kingfisher_(Alcedo_atthis_taprobana)_-_Male_-_Flickr_-_Lip_Kee.jpg"
+        image_url="https://upload.wikimedia.org/wikipedia/commons/d/de/Common_Kingfisher_(Alcedo_atthis_taprobana)_-_Male_-_Flickr_-_Lip_Kee.jpg"
     )
     session.add(item3)
     session.commit()
@@ -109,7 +106,7 @@ def populate_database():
             "classification."
         ),
         quantity=7,
-        image_url = "https://upload.wikimedia.org/wikipedia/commons/6/65/Blue_Tit_-_flickr.jpg"
+        image_url="https://upload.wikimedia.org/wikipedia/commons/6/65/Blue_Tit_-_flickr.jpg"
     )
     session.add(item4)
     session.commit()
@@ -127,7 +124,7 @@ def populate_database():
             "all teeth and scales by adulthood."
         ),
         quantity=4,
-        image_url = "https://upload.wikimedia.org/wikipedia/commons/f/f6/Xiphias_gladius2.jpg"
+        image_url="https://upload.wikimedia.org/wikipedia/commons/f/f6/Xiphias_gladius2.jpg"
     )
     session.add(item5)
     session.commit()
@@ -146,7 +143,7 @@ def populate_database():
             "(66,000 lb) are not uncommon."
         ),
         quantity=1,
-        image_url = "https://upload.wikimedia.org/wikipedia/en/7/78/Whaleshark.jpg"
+        image_url="https://upload.wikimedia.org/wikipedia/en/7/78/Whaleshark.jpg"
     )
     session.add(item6)
     session.commit()
@@ -166,7 +163,7 @@ def populate_database():
             "rarely growing larger."
         ),
         quantity=2,
-        image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Saltwater_crocodile.jpg/640px-Saltwater_crocodile.jpg"
+        image_url="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Saltwater_crocodile.jpg/640px-Saltwater_crocodile.jpg"
     )
     session.add(item7)
     session.commit()
@@ -183,7 +180,7 @@ def populate_database():
             "was considered a subspecies of Python molurus, but now is "
             "recognized as belonging to a distinct species."
         ),
-        image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Burmese_Python_02.jpg/640px-Burmese_Python_02.jpg"
+        image_url="https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Burmese_Python_02.jpg/640px-Burmese_Python_02.jpg"
     )
     session.add(item8)
     session.commit()
@@ -202,7 +199,7 @@ def populate_database():
             "and relative humidity of 80-90%."
         ),
         quantity=2,
-        image_url = "https://upload.wikimedia.org/wikipedia/commons/9/9a/Phyllobates_terribilis_climbing_on_leaves.png"
+        image_url="https://upload.wikimedia.org/wikipedia/commons/9/9a/Phyllobates_terribilis_climbing_on_leaves.png"
     )
     session.add(item9)
     session.commit()
@@ -221,7 +218,7 @@ def populate_database():
             "common name."
         ),
         quantity=4,
-        image_url = "https://c1.staticflickr.com/7/6143/5991036083_b2a7f8d894_b.jpg"
+        image_url="https://c1.staticflickr.com/7/6143/5991036083_b2a7f8d894_b.jpg"
     )
     session.add(item10)
     session.commit()
@@ -237,7 +234,7 @@ def populate_database():
             "which includes over 200 species of Solenopsis worldwide."
         ),
         quantity=200,
-        image_url = "https://c2.staticflickr.com/4/3614/3469703353_9020c24f36.jpg"
+        image_url="https://c2.staticflickr.com/4/3614/3469703353_9020c24f36.jpg"
     )
     session.add(item11)
     session.commit()
@@ -253,7 +250,7 @@ def populate_database():
             "continent except Antarctica."
         ),
         quantity=5,
-        image_url = "https://upload.wikimedia.org/wikipedia/commons/f/fe/Swallowtail_Butterfly_(Papilio_machaon)_-_geograph.org.uk_-_854088.jpg"
+        image_url="https://upload.wikimedia.org/wikipedia/commons/f/fe/Swallowtail_Butterfly_(Papilio_machaon)_-_geograph.org.uk_-_854088.jpg"
     )
     session.add(item12)
     session.commit()

@@ -4,14 +4,15 @@ from flask import render_template, request, redirect, url_for, flash
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 from flask import session as login_session
+from sqlalchemy.orm.exc import NoResultFound
 import httplib2
 import json
 from flask import make_response
 import requests
 
 from catalog import app
-from database_setup import User, Category
-from connect_to_database import connect_to_database
+from catalog.database_setup import User, Category
+from catalog.connect_to_database import connect_to_database
 
 
 @app.route('/login')
@@ -52,8 +53,8 @@ def gconnect():
     access_token = credentials.access_token
     url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
            % access_token)
-    h = httplib2.Http()
-    result = json.loads(h.request(url, 'GET')[1])
+    http = httplib2.Http()
+    result = json.loads(http.request(url, 'GET')[1])
 
     # If there was an error in the access token info, abort.
     if result.get('error') is not None:
@@ -106,7 +107,7 @@ def gconnect():
     # Check if the user exists in the database. If not create a new user.
     user_id = get_user_id(login_session['email'])
     if user_id is None:
-        user_id = create_user(login_session)
+        user_id = create_user()
     login_session['user_id'] = user_id
 
     output = ''
@@ -132,8 +133,8 @@ def gdisconnect():
 
     # Execute HTTP GET request to revoke current token.
     url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token
-    h = httplib2.Http()
-    result = h.request(url, 'GET')[0]
+    http = httplib2.Http()
+    result = http.request(url, 'GET')[0]
 
     if result['status'] == '200':
         response = make_response(json.dumps('Successfully disconnected.'), 200)
@@ -165,18 +166,16 @@ def fbconnect():
     url = ('https://graph.facebook.com/oauth/access_token?'
            'grant_type=fb_exchange_token&client_id=%s&client_secret=%s'
            '&fb_exchange_token=%s') % (app_id, app_secret, access_token)
-    h = httplib2.Http()
-    result = h.request(url, 'GET')[1]
-
-    # Use token to get user info from API.
-    userinfo_url = "https://graph.facebook.com/v2.5/me"
+    http = httplib2.Http()
+    result = http.request(url, 'GET')[1]
 
     # Strip expire tag from access token
     token = result.split("&")[0]
 
+    # Use token to get user info from API.
     url = 'https://graph.facebook.com/v2.5/me?%s&fields=name,id,email' % token
-    h = httplib2.Http()
-    result = h.request(url, 'GET')[1]
+    http = httplib2.Http()
+    result = http.request(url, 'GET')[1]
     data = json.loads(result)
     login_session['provider'] = 'facebook'
     login_session['username'] = data["name"]
@@ -192,8 +191,8 @@ def fbconnect():
     # Get user picture
     url = ('https://graph.facebook.com/v2.5/me/picture?%s&redirect=0'
            '&height=200&width=200') % token
-    h = httplib2.Http()
-    result = h.request(url, 'GET')[1]
+    http = httplib2.Http()
+    result = http.request(url, 'GET')[1]
     data = json.loads(result)
 
     login_session['picture'] = data["data"]["url"]
@@ -201,7 +200,7 @@ def fbconnect():
     # Check if the user exists in the database. If not create a new user.
     user_id = get_user_id(login_session['email'])
     if user_id is None:
-        user_id = create_user(login_session)
+        user_id = create_user()
     login_session['user_id'] = user_id
 
     output = ''
@@ -226,10 +225,20 @@ def fbdisconnect():
 
     url = ('https://graph.facebook.com/%s/permissions?'
            'access_token=%s') % (facebook_id, access_token)
-    print url
-    h = httplib2.Http()
-    result = h.request(url, 'DELETE')[1]
-    return
+
+    http = httplib2.Http()
+    result = http.request(url, 'DELETE')[1]
+
+    if result == '{"success":true}':
+        response = make_response(json.dumps('Successfully disconnected.'), 200)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    else:
+        # For whatever reason, the given token was invalid.
+        response = make_response(
+            json.dumps('Failed to revoke token for given user.'), 400)
+        response.headers['Content-Type'] = 'application/json'
+        return response
 
 
 @app.route('/logout')
@@ -259,7 +268,7 @@ def logout():
         return redirect(url_for('show_homepage'))
 
 
-def create_user(login_session):
+def create_user():
     """Create a new user in the database."""
     new_user = User(name=login_session['username'],
                     email=login_session['email'],
@@ -287,6 +296,6 @@ def get_user_id(email):
         user = session.query(User).filter_by(email=email).one()
         session.close()
         return user.id
-    except:
+    except NoResultFound:
         session.close()
         return None
