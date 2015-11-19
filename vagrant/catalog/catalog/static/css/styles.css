@@ -1,0 +1,38 @@
+.mdl-layout-title a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.mdl-grid {
+	max-width: 800px;
+}
+
+.mdl-card__media {
+	margin: 0;
+}
+
+.mdl-card__media > img {
+	max-width: 100%;
+}
+
+.zooma-card_latest {
+    height: 255px;
+}
+
+.zooma-card_image {
+    height: 100%;
+    background-size: cover;
+    -moz-background-size: cover;
+    -webkit-background-size: cover;
+    background-position: center;
+}
+
+.zooma-card_no_image {
+    text-align: center;
+    color: white;
+    line-height: 200px;
+}
+
+h1 {
+    text-align: center;
+}
