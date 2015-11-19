@@ -1,33 +1,78 @@
 <!doctype html>
 
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %} - ZooMA</title>
+
+    <!-- MDL -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='mdl/material.min.css') }}">
+    <script src="{{ url_for('static', filename='mdl/material.min.js') }}"></script>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
     {% block head %}
     {% endblock head %}
 </head>
 
 <body>
-    <h1><a href="/">ZooMA - Zoo Management App</a></h1>
-    {% if 'username' not in session %}
-    <p><a href="{{ url_for('show_login') }}">Login</a></p>
-    {% else %}
-    <p><a href="{{ url_for('logout')}}">Logout</a></p>
-    {% endif %}
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul class="flash_msg">
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
-    <h2>Categories</h2>
-    {% for category in categories %}
-    <p><a href="{{ url_for('show_items', category_name=category.name) }}">{{ category.name }}</a></p>
-    {% endfor %}
-    {% block content %}
-    {% endblock content %}
+    <!-- Always shows a header, even in smaller screens. -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-color--grey-100">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+                <!-- Title -->
+                <span class="mdl-layout-title mdl-layout--large-screen-only"><a href="/">ZooMA - Zoo Management App</a></span>
+                <span class="mdl-layout-title mdl-layout--small-screen-only"><a href="/">ZooMA</a></span>
+                <!-- Add spacer, to align navigation to the right -->
+                <div class="mdl-layout-spacer"></div>
+                <!-- Navigation. We hide it in small screens. -->
+                <nav class="mdl-navigation mdl-layout--large-screen-only">
+                    {% for category in categories %}
+                    <a class="mdl-navigation__link" href="{{ url_for('show_items', category_name=category.name) }}">{{ category.name }}</a>
+                    {% endfor %}
+                    {% if 'username' not in session %}
+                    <form action="{{ url_for('show_login') }}">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                            Login
+                        </button>
+                    </form>
+                    {% else %}
+                    <form action="{{ url_for('logout')}}">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
+                            Logout
+                        </button>
+                    </form>
+                    {% endif %}
+                </nav>
+            </div>
+        </header>
+        <div class="mdl-layout__drawer">
+            <span class="mdl-layout-title">Categories</span>
+            <nav class="mdl-navigation">
+                {% for category in categories %}
+                <a class="mdl-navigation__link" href="{{ url_for('show_items', category_name=category.name) }}">{{ category.name }}</a>
+                {% endfor %}
+            </nav>
+        </div>
+        <main class="mdl-layout__content">
+            <div class="page-content">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class="flash_msg">
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+
+                {% block content %}
+                {% endblock content %}
+            </div>
+        </main>
+    </div>
 </body>
 
 </html>
