@@ -148,7 +148,7 @@ def create_item():
 
         # See, if any, which category page new item was click on.
         ref_category = None
-        if 'catalog' in request.referrer:
+        if request.referrer and 'catalog' in request.referrer:
             ref_url_elements = request.referrer.split('/')
             if len(ref_url_elements) > 5:
                 ref_category = ref_url_elements[4]
