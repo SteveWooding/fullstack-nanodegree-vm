@@ -65,22 +65,27 @@ h1 {
 }
 
 .zooma-card-login > .mdl-card__title {
-  align-items: flex-start;
-  color: #fff;
+    align-items: flex-start;
+    color: #fff;
 }
 
 .zooma-card-login > .mdl-card__actions {
-  display: flex;
-  box-sizing:border-box;
-  align-items: center;
+    display: flex;
+    box-sizing:border-box;
+    align-items: center;
 }
 
 .zooma-add-animal_button {
     position: fixed;
-      display: block;
-      right: 0;
-      bottom: 0;
-      margin-right: 40px;
-      margin-bottom: 40px;
-      z-index: 900;
+    display: block;
+    right: 0;
+    bottom: 0;
+    margin-right: 40px;
+    margin-bottom: 40px;
+    z-index: 900;
+}
+
+.flash_msg {
+    color: #fff;
+    background-color: #536DFE;
 }
