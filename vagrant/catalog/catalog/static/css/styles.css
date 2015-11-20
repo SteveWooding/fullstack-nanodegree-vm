@@ -98,3 +98,12 @@ h1 {
     background-color: #fff;
     padding: 15px;
 }
+
+.zooma-edit-image {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.zooma-edit-image img {
+    max-width: 100%;
+}
