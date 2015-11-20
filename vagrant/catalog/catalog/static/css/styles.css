@@ -89,3 +89,12 @@ h1 {
     color: #fff;
     background-color: #536DFE;
 }
+
+.zooma-cancel-button {
+    margin-left: 15px;
+}
+
+.zooma-form {
+    background-color: #fff;
+    padding: 15px;
+}

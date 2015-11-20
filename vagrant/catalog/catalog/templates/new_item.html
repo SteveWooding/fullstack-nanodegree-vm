@@ -1,33 +1,47 @@
 {% extends "layout.html" %}
 {% block title %}New Animal{% endblock %}
 {% block content %}
-    <h2>Add New Animal</h2>
-    <form action="{{ url_for('create_item') }}" method="post" enctype="multipart/form-data">
-        <p>Name</p>
-        <input type="text" size="30" name="name" placeholder="Animal name">
-        <p>Description</p>
-        <textarea name="description" rows="5" cols="30"></textarea>
-        <p>Zoo Population</p>
-        <input type="number" name="quantity" size="5" min="0" value=1>
-        <p>Category</p>
-        <select name="category">
-            {% for category in categories %}
-                {% if category.name == ref_category %}
-                <option value="{{ category.name }}" selected>{{ category.name }}</option>
-                {% else %}
-                <option value="{{ category.name }}">{{ category.name }}</option>
-                {% endif %}
-            {% endfor %}
-        </select>
-        <p>Upload an image of the animal <em>(optional)</em></p>
-        <p>Select an image file <em>(jpg, png, gif, 4 MB max size)</em>: <input type="file" name="file"></p>
-        <p>Or supply a link to an image on the web <em>(an upload will be used if supplied)</em></p>
-        <input type="text" size="60" name="image_url" placeholder="http://www.domainname.com/image.jpg">
-
-        <p>
+    <h1>Add New Animal</h1>
+    <div class="mdl-grid zooma-form mdl-shadow--2dp">
+        <form action="{{ url_for('create_item') }}" method="post" enctype="multipart/form-data">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="text" name="name" id="name" />
+                <label class="mdl-textfield__label" for="name">Animal name</label>
+            </div>
+            <br>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <textarea class="mdl-textfield__input" name="description" rows="3" cols="30" id="description"></textarea>
+                <label class="mdl-textfield__label" for="description">Description</label>
+            </div>
+            <br>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="number" name="quantity" id="qty" size="5" min="0" value=1 />
+                <label class="mdl-textfield__label" for="qty">Zoo population</label>
+            </div>
+            <br>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <select class="mdl-textfield__input" name="category" id="category">
+                    {% for category in categories %}
+                        {% if category.name == ref_category %}
+                        <option value="{{ category.name }}" selected>{{ category.name }}</option>
+                        {% else %}
+                        <option value="{{ category.name }}">{{ category.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+                <label class="mdl-textfield__label" for="category">Category</label>
+            </div>
+            <h6>Upload an image of the animal <em>(optional)</em></h6>
+            <p>Select an image file <em>(jpg, png, gif, 4 MB max size)</em>: <br><input type="file" name="file"></p>
+            <p>Or supply a link to an image on the web <em>(an upload will be used if supplied)</em></p>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="text" name="image_url" id="image_url" />
+                <label class="mdl-textfield__label" for="image_url">Full image URL</label>
+            </div>
+            <br>
             <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
-            <input type="submit" value="Create">
-            <a href="{{ url_for('show_homepage') }}">Cancel</a>
-        </p>
-    </form>
+            <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="submit" value="Create">
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--grey-300 zooma-cancel-button" href="{{ url_for('show_homepage') }}">Cancel</a>
+        </form>
+    </div>
 {% endblock %}
