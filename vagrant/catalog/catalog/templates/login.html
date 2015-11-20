@@ -43,25 +43,52 @@
    }(document, 'script', 'facebook-jssdk'));
 </script>
 
-<!-- Google+ Login Button -->
-<div id="signinButton">
-    <span class="g-signin"
-        data-scope="openid email"
-        data-clientid="772075218759-51peqa5mv8h1u9gd7lmjms4ip1ef52ch.apps.googleusercontent.com"
-        data-redirecturi="postmessage"
-        data-accesstype="offline"
-        data-cookiepolicy="single_host_origin"
-        data-callback="signInCallback"
-        data-approvalprompt="force">
-    </span>
+<h1>Login to ZooMA</h1>
+
+<div class="mdl-grid">
+    <div class="zooma-card-login zooma-card-login-g mdl-card mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-shadow--2dp">
+        <div class="mdl-card__title mdl-card--expand">
+            <h4>
+                Login with your <br> Google+ account
+            </h4>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <!-- Google+ Login Button -->
+            <div id="signinButton">
+                <span class="g-signin"
+                    data-scope="openid email"
+                    data-clientid="772075218759-51peqa5mv8h1u9gd7lmjms4ip1ef52ch.apps.googleusercontent.com"
+                    data-redirecturi="postmessage"
+                    data-accesstype="offline"
+                    data-cookiepolicy="single_host_origin"
+                    data-callback="signInCallback"
+                    data-approvalprompt="force">
+                </span>
+            </div>
+            <div class="mdl-layout-spacer"></div>
+            <i class="material-icons">account_circle</i>
+        </div>
+    </div>
+    <div class="zooma-card-login zooma-card-login-fb mdl-card mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-shadow--2dp">
+        <div class="mdl-card__title mdl-card--expand">
+            <h4>
+                Login with your <br> Facebook account
+            </h4>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <!-- Facebook login button -->
+            <fb:login-button size="large" scope="public_profile,email" onlogin="sendTokenToServer();" style="height: 40px;">
+                <a href="javascript:sendTokenToServer()">Login with Facebook</a>
+            </fb:login-button>
+            <div class="mdl-layout-spacer"></div>
+            <i class="material-icons">account_circle</i>
+        </div>
+    </div>
 </div>
 
-<!-- Facebook login button -->
-<fb:login-button scope="public_profile,email" onlogin="sendTokenToServer();">
-    <a href="javascript:sendTokenToServer()">Login with Facebook</a>
-</fb:login-button>
-
-<div id="result"></div>
+<div class="mdl-grid">
+    <div id="result"></div>
+</div>
 
 <!-- Google+ Login script -->
 <script>

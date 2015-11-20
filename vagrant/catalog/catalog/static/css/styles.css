@@ -1,3 +1,7 @@
+html {
+    color: rgba(66,66,66,.87);
+}
+
 .mdl-layout-title a {
     text-decoration: none;
     color: inherit;
@@ -36,4 +40,25 @@
 h1 {
     text-align: center;
     font-size: 52px;
+}
+
+.zooma-card-login-g > .mdl-card__title {
+    background: #EF5350;
+
+}
+
+.zooma-card-login-fb > .mdl-card__title {
+    background: #0D47A1;
+
+}
+
+.zooma-card-login > .mdl-card__title {
+  align-items: flex-start;
+  color: #fff;
+}
+
+.zooma-card-login > .mdl-card__actions {
+  display: flex;
+  box-sizing:border-box;
+  align-items: center;
 }
