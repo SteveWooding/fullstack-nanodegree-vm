@@ -23,6 +23,18 @@ html {
     height: 255px;
 }
 
+.zooma-card_item {
+    background-color: #fff;
+
+}
+
+.zooma-card_item img {
+        max-height: 500px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+}
+
 .zooma-card_image {
     height: 100%;
     background-size: cover;
