@@ -31,6 +31,11 @@
     {% endfor %}
     </div>
     {% if 'username' in session %}
-    <p><a href="{{ url_for('create_item') }}">Add new animal</a></p>
+    <button id="tt1" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--fab mdl-button--colored zooma-add-animal_button" href="{{ url_for('create_item') }}">
+        <i class="material-icons">add</i>
+    </button>
+    <div class="mdl-tooltip mdl-tooltip" for="tt1">
+        Add animal
+    </div>
     {% endif %}
 {% endblock %}
