@@ -1,15 +1,15 @@
 {% extends "layout.html" %}
 {% block title %}Delete Animal{% endblock %}
 {% block content %}
-    <h2>Delete Animal</h2>
-    <form action="{{ url_for('delete_item', item_name=item.name) }}" method="post">
-        <p>Are you sure you want to delete the animal {{ item.name }}?</p>
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
-        <input type="submit" value="Delete">
-        {% for category in categories %}
-            {% if item.category_id == category.id %}
-            <a href="{{ url_for('show_item', category_name=category.name, item_name=item.name) }}">Cancel</a>
-            {% endif %}
-        {% endfor %}
-    </form>
+    <h1>Delete Animal</h1>
+    <div class="mdl-grid zooma-form mdl-shadow--2dp">
+        <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
+            <form action="{{ url_for('delete_item', item_name=item.name) }}" method="post">
+                <h6>Are you sure you want to delete the animal {{ item.name }}?</h6>
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--red-500 zooma-delete-button" type="submit" value="Delete">
+                {% for category in categories if item.category_id == category.id %}
+                <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--grey-300 zooma-cancel-button" href="{{ url_for('show_item', category_name=category.name, item_name=item.name) }}">Cancel</a>
+                {% endfor %}
+            </form>
 {% endblock %}
