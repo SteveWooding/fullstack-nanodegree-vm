@@ -119,3 +119,12 @@ h1 {
 .zooma-profile-picture {
     border-radius: 50%;
 }
+
+.mdl-layout__drawer > .mdl-layout-title {
+    line-height: 40px;
+}
+
+.mdl-layout__drawer .mdl-navigation {
+    padding-top: 2px;
+    padding-bottom: 16px;
+}
