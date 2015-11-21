@@ -111,3 +111,7 @@ h1 {
 .zooma-delete-button {
     color: rgba(255, 255, 255, 0.97);
 }
+
+.zooma-login-logout-button {
+    margin-left: 10px;
+}

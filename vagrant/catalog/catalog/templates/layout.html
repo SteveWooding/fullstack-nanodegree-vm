@@ -34,13 +34,13 @@
                     {% endfor %}
                     {% if 'username' not in session %}
                     <form action="{{ url_for('show_login') }}">
-                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent zooma-login-logout-button">
                             Login
                         </button>
                     </form>
                     {% else %}
                     <form action="{{ url_for('logout')}}">
-                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--grey-300">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--grey-300 zooma-login-logout-button">
                             Logout
                         </button>
                     </form>
