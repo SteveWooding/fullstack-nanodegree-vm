@@ -53,6 +53,8 @@ def show_items(category_name):
     items = (session.query(Item).filter_by(category=category).
              order_by(Item.name).all())
     session.close()
+    if not items:
+        flash("There are currently no animals in this category.")
     return render_template('items.html',
                            categories=categories,
                            category=category,
