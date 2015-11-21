@@ -115,3 +115,7 @@ h1 {
 .zooma-login-logout-button {
     margin-left: 10px;
 }
+
+.zooma-profile-picture {
+    border-radius: 50%;
+}
