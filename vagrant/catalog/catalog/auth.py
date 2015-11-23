@@ -282,7 +282,14 @@ def create_user():
 
 
 def get_user_id(email):
-    """Given an email address, return the user ID, if in the database."""
+    """Given an email address, return the user ID, if in the database.
+
+    Args:
+        email (str): The email address associated with the user account.
+
+    Returns:
+        The user id number stored in the database.
+    """
     session = connect_to_database()
     try:
         user = session.query(User).filter_by(email=email).one()
