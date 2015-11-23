@@ -2,12 +2,12 @@
 {% block title %}{{ category.name }}{% endblock %}
 {% block content %}
     {% if items|length == 0 %}
-        <h1>{{ category.name }} (0 animals)</h1>
+        <h1>{{ category.name }} <br><small>(0 animals)</small></h1>
     {% else %}
         {% if items|length > 1 %}
-        <h1>{{ category.name }} ({{ items|length }} animals)</h1>
+        <h1>{{ category.name }} <br><small>({{ items|length }} animals)</small></h1>
         {% else %}
-        <h1>{{ category.name }} (1 animal)</h1>
+        <h1>{{ category.name }} <br><small>(1 animal)</small></h1>
         {% endif %}
     {% endif %}
         <div class="mdl-grid">
