@@ -13,13 +13,21 @@ from catalog.connect_to_database import connect_to_database
 
 
 def allowed_file(filename):
-    """Check if the filename has one of the allowed extensions."""
+    """Check if the filename has one of the allowed extensions.
+
+    Args:
+        filename (str): Name of file to check.
+    """
     return ('.' in filename and filename.rsplit('.', 1)[1] in
             app.config['ALLOWED_EXTENSIONS'])
 
 
 def delete_image(filename):
-    """Delete an item image file from the filesystem."""
+    """Delete an item image file from the filesystem.
+
+    Args:
+        filename (str): Name of file to be deleted.
+    """
     try:
         os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
     except OSError:
@@ -29,7 +37,11 @@ def delete_image(filename):
 @app.route('/')
 @app.route('/catalog/')
 def show_homepage():
-    """Show the homepage diplaying the categories and latest items."""
+    """Show the homepage diplaying the categories and latest items.
+
+    Returns:
+        A webpage with the 10 latest items that have added.
+    """
     session = connect_to_database()
     categories = session.query(Category).all()
     latest_items = session.query(Item).order_by(desc(Item.id))[0:10]
@@ -41,7 +53,15 @@ def show_homepage():
 
 @app.route('/catalog/<category_name>/items/')
 def show_items(category_name):
-    """Show items belonging to a specified category."""
+    """Show items belonging to a specified category.
+
+    Args:
+        category_name (str): The name of the category to which the item
+            belongs.
+
+    Returns:
+        A webpage showing all the items in the specified category.
+    """
     session = connect_to_database()
     try:
         category = session.query(Category).filter_by(name=category_name).one()
@@ -63,7 +83,16 @@ def show_items(category_name):
 
 @app.route('/catalog/<category_name>/<item_name>/')
 def show_item(category_name, item_name):
-    """Show details of a particular item belonging to a specified category."""
+    """Show details of a particular item belonging to a specified category.
+
+    Args:
+        category_name (str): The name of the category to which the item
+            belongs.
+        item_name (str): The name of the item.
+
+    Returns:
+        A webpage showing infomation of the reqeusted item.
+    """
     session = connect_to_database()
     try:
         category = session.query(Category).filter_by(name=category_name).one()
@@ -169,7 +198,13 @@ def create_item():
            methods=['GET', 'POST'])
 @app.route('/catalog/<item_name>/edit/', methods=['GET', 'POST'])
 def edit_item(item_name, category_name=None):
-    """Edit the details of the specified item."""
+    """Edit the details of the specified item.
+
+    Args:
+        item_name (str): Name of item to be edited.
+        category_name (str): Optionally, can also specify the category to
+            which the item belongs to.
+    """
     if 'username' not in login_session:
         flash("You need to login to edit any animals.")
         return redirect('/login')
@@ -261,7 +296,11 @@ def edit_item(item_name, category_name=None):
 
 @app.route('/catalog/<item_name>/delete/', methods=['GET', 'POST'])
 def delete_item(item_name):
-    """Delete a specified item from the database."""
+    """Delete a specified item from the database.
+
+    Args:
+        item_name (str): Name of the item to be deleted.
+    """
     if 'username' not in login_session:
         return redirect('/login')
 
@@ -305,5 +344,9 @@ def delete_item(item_name):
 
 @app.route('/item_images/<filename>')
 def show_item_image(filename):
-    """Route to serve user uploaded images."""
+    """Route to serve user uploaded images.
+
+    Args:
+        filename (str): Filename of the image to serve to the client.
+    """
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
