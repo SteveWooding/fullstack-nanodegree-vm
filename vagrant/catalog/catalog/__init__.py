@@ -2,6 +2,7 @@
 from flask import Flask
 from flask.ext.seasurf import SeaSurf
 
+# Initialise the Flask app object
 app = Flask(__name__)
 
 # Initialise SeaSurf anti-CSRF Flask extension

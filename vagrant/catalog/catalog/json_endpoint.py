@@ -27,7 +27,7 @@ def items_json():
 def item_json(item_name, category_name=None):
     """Returns a single item in a JSON file.
 
-    Attributes:
+    Args:
         item_name (str): The name of the item to return in JSON format.
         category_name (str): A dummy variable used so that the path can
             optionally include the category name.
