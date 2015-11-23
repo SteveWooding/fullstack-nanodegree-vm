@@ -31,6 +31,8 @@ def items_xml():
             name_tag.text = item.name
             desc_tag = SubElement(item_tag, 'description')
             desc_tag.text = item.description
+            desc_tag = SubElement(item_tag, 'quantity')
+            desc_tag.text = str(item.quantity)
 
     session.close()
 
