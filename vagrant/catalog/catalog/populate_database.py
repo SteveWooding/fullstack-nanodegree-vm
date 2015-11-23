@@ -143,7 +143,7 @@ def populate_database():
             "(66,000 lb) are not uncommon."
         ),
         quantity=1,
-        image_url="https://upload.wikimedia.org/wikipedia/en/7/78/Whaleshark.jpg"
+        image_url="https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Male_whale_shark_at_Georgia_Aquarium_crop.jpg/1024px-Male_whale_shark_at_Georgia_Aquarium_crop.jpg"
     )
     session.add(item6)
     session.commit()
