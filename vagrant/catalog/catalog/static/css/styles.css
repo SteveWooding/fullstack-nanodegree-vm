@@ -2,6 +2,12 @@ html {
     color: rgba(66,66,66,.87);
 }
 
+html, body {
+    font-family: 'Roboto', 'Helvetica', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
 /* Make the title look like normal text while clickable. */
 .mdl-layout-title a {
     text-decoration: none;
@@ -19,6 +25,11 @@ html {
 
 .mdl-card__media > img {
 	max-width: 100%;
+}
+
+.mdl-card__supporting-text {
+    font-size: 15px;
+    color: rgba(0,0,0,.65);
 }
 
 /* Height of animal preview cards on homepage and category pages. */
