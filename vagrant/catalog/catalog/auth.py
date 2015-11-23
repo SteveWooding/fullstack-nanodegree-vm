@@ -281,14 +281,6 @@ def create_user():
     return user.id
 
 
-def get_user_info(user_id):
-    """Get info for a user from the database."""
-    session = connect_to_database()
-    user = session.query(User).filter_by(id=user_id).one()
-    session.close()
-    return user
-
-
 def get_user_id(email):
     """Given an email address, return the user ID, if in the database."""
     session = connect_to_database()
