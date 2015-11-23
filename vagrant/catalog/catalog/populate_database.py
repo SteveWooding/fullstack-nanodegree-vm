@@ -1,4 +1,4 @@
-"""Populate the item catalog database some inital content.
+"""Populate the item catalog database some initial content.
 
 This application stores animals of various categories. Six categories are
 created and some animals are created in each category.
@@ -9,7 +9,7 @@ from catalog.database_setup import User, Category, Item
 from catalog.connect_to_database import connect_to_database
 
 def populate_database():
-    """Populate the item catalog database some inital content."""
+    """Populate the item catalog database some initial content."""
     session = connect_to_database()
 
     # Create the six categories animals fall in to.
@@ -37,7 +37,7 @@ def populate_database():
     session.add(category6)
     session.commit()
 
-    # Create a dummy user for these intial items
+    # Create a dummy user for these initial items
     user1 = User(name="Bob Fossil", email="b.fossil@zooniverse.com")
     session.add(user1)
     session.commit()

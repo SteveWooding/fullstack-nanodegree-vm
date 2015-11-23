@@ -37,10 +37,10 @@ def delete_image(filename):
 @app.route('/')
 @app.route('/catalog/')
 def show_homepage():
-    """Show the homepage diplaying the categories and latest items.
+    """Show the homepage displaying the categories and latest items.
 
     Returns:
-        A webpage with the 10 latest items that have added.
+        A web page with the 10 latest items that have added.
     """
     session = connect_to_database()
     categories = session.query(Category).all()
@@ -60,7 +60,7 @@ def show_items(category_name):
             belongs.
 
     Returns:
-        A webpage showing all the items in the specified category.
+        A web page showing all the items in the specified category.
     """
     session = connect_to_database()
     try:
@@ -91,7 +91,7 @@ def show_item(category_name, item_name):
         item_name (str): The name of the item.
 
     Returns:
-        A webpage showing infomation of the reqeusted item.
+        A web page showing information of the requested item.
     """
     session = connect_to_database()
     try:
