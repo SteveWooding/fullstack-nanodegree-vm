@@ -8,7 +8,7 @@ from sqlalchemy import desc, literal
 from sqlalchemy.orm.exc import NoResultFound
 
 from catalog import app
-from catalog.database_setup import Category, Item
+from catalog.database_setup import Category, Item, User
 from catalog.connect_to_database import connect_to_database
 
 
@@ -79,12 +79,16 @@ def show_item(category_name, item_name):
         session.close()
         return redirect(url_for('show_items', category_name=category_name))
 
+    user = session.query(User).filter_by(id=item.user_id).one()
+    ower_name = user.name
+
     categories = session.query(Category).all()
     session.close()
     return render_template('item.html',
                            categories=categories,
                            category=category,
-                           item=item)
+                           item=item,
+                           ower_name=ower_name)
 
 
 @app.route('/catalog/new/', methods=['GET', 'POST'])
