@@ -10,28 +10,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from catalog import app
 from catalog.database_setup import Category, Item, User
 from catalog.connect_to_database import connect_to_database
-
-
-def allowed_file(filename):
-    """Check if the filename has one of the allowed extensions.
-
-    Args:
-        filename (str): Name of file to check.
-    """
-    return ('.' in filename and filename.rsplit('.', 1)[1] in
-            app.config['ALLOWED_EXTENSIONS'])
-
-
-def delete_image(filename):
-    """Delete an item image file from the filesystem.
-
-    Args:
-        filename (str): Name of file to be deleted.
-    """
-    try:
-        os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    except OSError:
-        print "Error deleting image file %s" % filename
+from catalog.file_management import allowed_file, delete_image
 
 
 @app.route('/')
