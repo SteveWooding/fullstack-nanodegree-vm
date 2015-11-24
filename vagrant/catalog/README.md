@@ -10,6 +10,10 @@ login via Google or Facebook in order to add their own animals. They can
 specify how many of each animal that are in the zoo and supply a picture
 of the animal.
 
+The backend code mainly refers to items, while the front talks about animals. Items
+were used as a requirement from Udacity of the URLs that were required to be
+functional.
+
 ## Required Libraries and Dependencies
 The project code requires the following software:
 
@@ -44,7 +48,8 @@ This project consists for the following files in the `catalog` directory:
         [JavaScript Cookie](https://github.com/js-cookie/js-cookie/), a JavaScript
         API for handling cookies.
     * `/templates` - Directory containing the HTML templates for the website, using
-        the [Jinja 2](http://jinja.pocoo.org/docs/dev/) templating lanuage for Python.
+        the [Jinja 2](http://jinja.pocoo.org/docs/dev/) templating language for Python.
+        See next section for more details on contents.
     * `__init__.py` - Initialises the Flask app and imports the URL routes.
     * `auth.py` - Handles the login and logout of users using OAuth.
     * `connect_to_database.py` - Function for connecting to the database.
@@ -56,6 +61,22 @@ This project consists for the following files in the `catalog` directory:
         for creating, editing and deleting animals. It also ensures that only the user
         that added an animal can edit or delete it.
     * `xml_generator.py` - Returns the data in XML format.
+
+### Templates
+The `/templates` directory contains the following files, written in HTML and the Jinja2
+templating language:
+
+* `add_item_button.html` - Renders a MDL button on a page to add a new item (animal).
+* `delete_item.html` - Delete animal confirmation page.
+* `edit_item.html` - Form to edit the details of an animal.
+* `homepage.html` - The default page, which lists the 10 latest animals that were added.
+* `item.html` - A page that displays a single animal and its details.
+* `items.html` - A page that lists the animals belonging to a single category.
+* `layout.html` - This defines the common layout of the website and is the parent
+    for all the other template pages.
+* `login.html` - A login page featuring OAuth Goolge+ and Facebook login buttons.
+* `my_items.html` - A page for displaying the animals you have added to the website.
+* `new_item.html` - A form for creating a new animal.
 
 ## How to Run the Project
 Download the project zip file to you computer and unzip the file. Or clone this
