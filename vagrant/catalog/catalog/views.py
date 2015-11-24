@@ -11,6 +11,7 @@ from catalog import app
 from catalog.database_setup import Category, Item, User
 from catalog.connect_to_database import connect_to_database
 from catalog.file_management import allowed_file, delete_image
+from catalog.auth import get_user_id
 
 
 @app.route('/')
@@ -57,6 +58,28 @@ def show_items(category_name):
     return render_template('items.html',
                            categories=categories,
                            category=category,
+                           items=items)
+
+
+@app.route('/catalog/myitems/')
+def show_my_items():
+    """If logged in, show the user the items they have added."""
+    if 'username' not in login_session:
+        return redirect('/login')
+
+    user_id = get_user_id(login_session['email'])
+
+    session = connect_to_database()
+    categories = session.query(Category).all()
+    items = session.query(Item).filter_by(user_id=user_id).all()
+    session.close()
+
+    if not items:
+        flash("You haven't add any animals yet.")
+        redirect(url_for('show_homepage'))
+
+    return render_template('my_items.html',
+                           categories=categories,
                            items=items)
 
 
