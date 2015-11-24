@@ -3,9 +3,14 @@ html {
 }
 
 html, body {
-    font-family: 'Roboto', 'Helvetica', sans-serif;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     margin: 0;
     padding: 0;
+}
+
+
+textarea {
+    font-family: "Helvetica","Arial", sans-serif;
 }
 
 /* Make the title look like normal text while clickable. */
