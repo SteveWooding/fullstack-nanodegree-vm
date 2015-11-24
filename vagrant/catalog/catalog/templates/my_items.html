@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block title %}My Animals{% endblock %}
+{% block content %}
+    {% if items|length == 0 %}
+        <h1>My Animals<br><small>(0 animals)</small></h1>
+    {% else %}
+        {% if items|length > 1 %}
+        <h1>My Animals <br><small>({{ items|length }} animals)</small></h1>
+        {% else %}
+        <h1>My Animals <br><small>(1 animal)</small></h1>
+        {% endif %}
+    {% endif %}
+        <div class="mdl-grid">
+        {% for item in items %}
+            {% for category in categories if item.category_id == category.id %}
+            <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-shadow--2dp">
+                <a href="{{ url_for('show_item', category_name=category.name, item_name=item.name) }}">
+                    <figure class="mdl-card__media zooma-card_latest">
+                        {% if item.image_filename != none %}
+                        <div style="background-image: url('{{ url_for('show_item_image', filename=item.image_filename) }}')" class="zooma-card_image"></div>
+                        {% elif item.image_url != none %}
+                        <div style="background-image: url('{{ item.image_url }}')" class="zooma-card_image"></div>
+                        {% else %}
+                        <div class="zooma-card_no_image">No image</div>
+                        {% endif %}
+                    </figure>
+                </a>
+                <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text">{{ item.name }}</h2>
+                    <div class="mdl-card__subtitle-text"><em>({{ category.name }})</em></div>
+                </div>
+                <div class="mdl-card__supporting-text">
+                    Zoo population: {{ item.quantity }}
+                </div>
+                <div class="mdl-card__actions mdl-card--border">
+                    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{ url_for('show_item', category_name=category.name, item_name=item.name) }}">
+                        Details
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        {% endfor %}
+    {% if 'username' in session %}
+    <a id="tt1" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--fab mdl-button--colored zooma-add-animal_button" href="{{ url_for('create_item') }}">
+        <i class="material-icons">add</i>
+    </a>
+    <div class="mdl-tooltip mdl-tooltip" for="tt1">
+        Add animal
+    </div>
+    {% endif %}
+{% endblock %}
