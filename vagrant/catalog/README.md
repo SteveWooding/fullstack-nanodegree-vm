@@ -7,7 +7,7 @@ Nanodegree](https://www.udacity.com/course/full-stack-web-developer-nanodegree--
 Runs a website called Zooma (Zoo Management App) that stores details of
 animals (the items) in the 6 categories of the animal kingdom. The user can
 login via Google or Facebook in order to add their own animals. They can
-specify how many of each animal that are in the zoo and supply a picture
+specify how many of each animal there is in the zoo and supply a picture
 of the animal.
 
 The backend code mainly refers to items, while the front talks about animals. Items
