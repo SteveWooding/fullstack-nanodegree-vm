@@ -64,6 +64,7 @@
                     <img class="zooma-profile-picture" src="{{ session.picture }}" width="30" height="30"/><br>
                     <strong>{{ session.username }}</strong><br>{{ session.email }}
                 </p>
+                <a class="mdl-navigation__link" href="{{ url_for('show_my_items') }}">My Animals</a>
                 <a class="mdl-navigation__link" href="{{ url_for('logout') }}">Logout</a>
                 {% endif %}
             </nav>
