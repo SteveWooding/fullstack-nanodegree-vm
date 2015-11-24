@@ -40,13 +40,16 @@ This project consists for the following files in the `catalog` directory:
 * `/catalog` - Directory containing the `catalog` package.
     * `/static` - Directory containing CSS and Javascript for the website.
         Includes a copy of the [Material Design Lite](http://www.getmdl.io/)
-        web framework by Google.
+        web framework by Google and
+        [JavaScript Cookie](https://github.com/js-cookie/js-cookie/), a JavaScript
+        API for handling cookies.
     * `/templates` - Directory containing the HTML templates for the website, using
         the [Jinja 2](http://jinja.pocoo.org/docs/dev/) templating lanuage for Python.
     * `__init__.py` - Initialises the Flask app and imports the URL routes.
     * `auth.py` - Handles the login and logout of users using OAuth.
     * `connect_to_database.py` - Function for connecting to the database.
     * `database_setup.py` - Defines the database classes and creates an empty database.
+    * `file_management.py` - Functions for handling user uploaded image files.
     * `json_endpoint.py` - Returns the data in JSON format.
     * `populate_database.py` - Inserts a selection of animals into the database.
     * `views.py` - Provides backend code to produce web page views of the data and forms
