@@ -44,7 +44,7 @@ class Category(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(100), nullable=False)
-    items = relationship('Item')
+    items = relationship('Item', cascade="save-update, merge, delete")
 
     @property
     def serialise(self):
