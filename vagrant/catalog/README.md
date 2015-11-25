@@ -113,6 +113,17 @@ Once inside the VM, navigate to the tournament directory with this command:
 cd /vagrant/catalog
 ```
 
+### OAuth setup
+In order to log in to the web app, you will need to get either a Google+ or Facebook
+(or both) OAuth app ID and secret. For Google, go to the
+[Google Developers Console](https://console.developers.google.com/) and for Facebook,
+go to [Facebook Login](https://developers.facebook.com/products/login).
+
+Once you have your credentials, put the IDs and secrets in the `fb_client_secrets.json`
+file for Facebook and `g_client_secrets.json` for Google.
+
+You will now be able to log in to the app.
+
 ### Run application.py
 On the first run of `application.py` there will be no database present, so it creates
 one and populates it with sample data. On the command line do:
