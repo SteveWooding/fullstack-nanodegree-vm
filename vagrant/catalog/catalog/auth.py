@@ -33,7 +33,7 @@ def show_login():
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
     """Performs app login via Google oauth."""
-    g_client_secrets_file = (app.config['OAUTH_SECRECTS_LOCATION'] +
+    g_client_secrets_file = (app.config['OAUTH_SECRETS_LOCATION'] +
                              'g_client_secrets.json')
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state parameter'), 401)
@@ -161,7 +161,7 @@ def fbconnect():
     access_token = request.data
 
     # Exchange client token for long-lived server-side token
-    fb_client_secrets_file = (app.config['OAUTH_SECRECTS_LOCATION'] +
+    fb_client_secrets_file = (app.config['OAUTH_SECRETS_LOCATION'] +
                               'fb_client_secrets.json')
     app_id = json.loads(
         open(fb_client_secrets_file, 'r').read())['web']['app_id']
