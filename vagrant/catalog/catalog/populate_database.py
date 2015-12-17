@@ -5,12 +5,20 @@ created and some animals are created in each category.
 
 This script should only be run on an empty database.
 """
+from sqlalchemy import func
+
 from catalog.database_setup import User, Category, Item
 from catalog.connect_to_database import connect_to_database
 
 def populate_database():
     """Populate the item catalog database some initial content."""
     session = connect_to_database()
+
+    # Make sure the database is empty before running this inital data dump.
+    category_count = session.query(func.count(Category.id)).scalar()
+    if category_count > 0:
+        session.close()
+        return
 
     # Create the six categories animals fall in to.
     category1 = Category(name="Mammals")
