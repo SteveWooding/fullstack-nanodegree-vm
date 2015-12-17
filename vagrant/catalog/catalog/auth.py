@@ -33,6 +33,8 @@ def show_login():
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
     """Performs app login via Google oauth."""
+    g_client_secrets_file = (app.config['OAUTH_SECRECTS_LOCATION'] +
+                             'g_client_secrets.json')
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state parameter'), 401)
         response.headers['Content-Type'] = 'application/json'
@@ -40,7 +42,7 @@ def gconnect():
     code = request.data
     try:
         # Upgrade the authorization one-time code into a credentials object
-        oauth_flow = flow_from_clientsecrets('g_client_secrets.json', scope='')
+        oauth_flow = flow_from_clientsecrets(g_client_secrets_file, scope='')
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
@@ -72,7 +74,7 @@ def gconnect():
 
     # Verify that the access token is valid for this app.
     g_client_id = json.loads(
-        open('g_client_secrets.json', 'r').read())['web']['client_id']
+        open(g_client_secrets_file, 'r').read())['web']['client_id']
     if result['issued_to'] != g_client_id:
         response = make_response(
             json.dumps("Token's client ID doesn't match app's."), 401)
@@ -159,10 +161,12 @@ def fbconnect():
     access_token = request.data
 
     # Exchange client token for long-lived server-side token
+    fb_client_secrets_file = (app.config['OAUTH_SECRECTS_LOCATION'] +
+                              'fb_client_secrets.json')
     app_id = json.loads(
-        open('fb_client_secrets.json', 'r').read())['web']['app_id']
+        open(fb_client_secrets_file, 'r').read())['web']['app_id']
     app_secret = json.loads(
-        open('fb_client_secrets.json', 'r').read())['web']['app_secret']
+        open(fb_client_secrets_file, 'r').read())['web']['app_secret']
     url = ('https://graph.facebook.com/oauth/access_token?'
            'grant_type=fb_exchange_token&client_id=%s&client_secret=%s'
            '&fb_exchange_token=%s') % (app_id, app_secret, access_token)
