@@ -15,7 +15,6 @@ application.config['UPLOAD_FOLDER'] = '/vagrant/catalog/item_images'
 application.config['OAUTH_SECRETS_LOCATION'] = '/vagrant/catalog/'
 application.config['ALLOWED_EXTENSIONS'] = set(['jpg', 'jpeg', 'png', 'gif'])
 application.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024  # 4 MB
-logging.warn('Hello')
 
 # Create database and populate it, if not already done so.
 create_db(application.config['DATABASE_URL'])
