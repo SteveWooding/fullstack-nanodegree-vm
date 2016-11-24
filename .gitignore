@@ -61,3 +61,6 @@ target/
 
 # SQLite DB files
 *.db
+
+# Python virtual environment
+venv/
