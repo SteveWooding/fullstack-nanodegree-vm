@@ -1,6 +1,6 @@
 """Initialisation for the catalog package."""
 from flask import Flask
-from flask.ext.seasurf import SeaSurf
+from flask_seasurf import SeaSurf
 
 # Initialise the Flask app object
 app = Flask(__name__)
