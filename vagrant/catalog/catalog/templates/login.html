@@ -1,12 +1,9 @@
 {% extends "layout.html" %}
 {% block title %}Login{% endblock %}
 {% block head %}
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
-    </script>
-    <script src="https://apis.google.com/js/client:platform.js?onload=start" async defer>
-    </script>
-    <script src="{{ url_for('static', filename='js/js.cookie-2.0.4.min.js') }}">
-    </script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
+    <script src="{{ url_for('static', filename='js/js.cookie-2.0.4.min.js') }}"></script>
     <script>
         // Setup AJAX to add the Cross Site Request Forgery token to requests
         var csrfToken = Cookies.get('_csrf_token');
@@ -20,6 +17,14 @@
                 }
         });
     </script>
+    <script>
+        function start() {
+            gapi.load('auth2', function() {
+                auth2 = gapi.auth2.init();
+            });
+        }
+    </script>
+    <meta name="google-signin-client_id" content="772075218759-51peqa5mv8h1u9gd7lmjms4ip1ef52ch.apps.googleusercontent.com">
 {% endblock head %}
 {% block content %}
 <!-- Load the Facebook SDK -->
@@ -54,17 +59,7 @@
         </div>
         <div class="mdl-card__actions mdl-card--border">
             <!-- Google+ Login Button -->
-            <div id="signinButton">
-                <span class="g-signin"
-                    data-scope="openid email"
-                    data-clientid="772075218759-51peqa5mv8h1u9gd7lmjms4ip1ef52ch.apps.googleusercontent.com"
-                    data-redirecturi="postmessage"
-                    data-accesstype="offline"
-                    data-cookiepolicy="single_host_origin"
-                    data-callback="signInCallback"
-                    data-approvalprompt="force">
-                </span>
-            </div>
+            <button id="signinButton" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect google-login-button">Login with Google</button>
             <div class="mdl-layout-spacer"></div>
             <i class="material-icons">account_circle</i>
         </div>
@@ -77,7 +72,7 @@
         </div>
         <div class="mdl-card__actions mdl-card--border">
             <!-- Facebook login button -->
-            <fb:login-button size="large" scope="public_profile,email" onlogin="sendTokenToServer();" style="height: 40px;">
+            <fb:login-button size="large" scope="public_profile,email" onlogin="sendTokenToServer();" style="height: 36px;">
                 <a href="javascript:sendTokenToServer()">Login with Facebook</a>
             </fb:login-button>
             <div class="mdl-layout-spacer"></div>
@@ -92,36 +87,39 @@
 
 <!-- Google+ Login script -->
 <script>
-    function signInCallback(authResult) {
-        if (authResult['code']) {
-            // Hide the sign-in button now that the user is authenticated.
-            $('#signinButton').attr('style', 'display: none');
+    $('#signinButton').click(function() {
+        function signInCallback(authResult) {
+            if (authResult['code']) {
+                // Hide the sign-in button now that the user is authenticated.
+                $('#signinButton').attr('style', 'display: none');
 
-            // Send the one-time-use code to the server, if the server
-            // responds, write a 'login successful' message to the web page
-            // and then redirect back to the main restaurants page
-            $.ajax({
-                type: 'POST',
-                url: '/gconnect?state={{STATE}}',
-                processData: false,
-                contentType: 'application/octet-stream; charset=utf-8',
-                data: authResult['code'],
-                success: function(result) {
-                    if (result) {
-                        $('#result').html('Login Successful!</br>' + result + '</br>Redirecting...')
-                        setTimeout(function() {
-                            window.location.href = "/";
-                        }, 4000);
-                    } else if (authResult['error']) {
-                        console.log('There was an error: ' + authResult['error']);
-                    } else {
-                        $('#result').html('Faild to make a server side call. Check you configuation and console');
+                // Send the one-time-use code to the server, if the server
+                // responds, write a 'login successful' message to the web page
+                // and then redirect back to the main restaurants page
+                $.ajax({
+                    type: 'POST',
+                    url: '/gconnect?state={{STATE}}',
+                    processData: false,
+                    contentType: 'application/octet-stream; charset=utf-8',
+                    data: authResult['code'],
+                    success: function(result) {
+                        if (result) {
+                            $('#result').html('Login Successful!</br>' + result + '</br>Redirecting...')
+                            setTimeout(function() {
+                                window.location.href = "/";
+                            }, 4000);
+                        } else if (authResult['error']) {
+                            console.log('There was an error: ' + authResult['error']);
+                        } else {
+                            $('#result').html('Faild to make a server side call. Check you configuation and console');
+                        }
+
                     }
-
-                }
-            });
+                });
+            }
         }
-    }
+        auth2.grantOfflineAccess().then(signInCallback);
+    });
 </script>
 
 <!-- Facebook Login script -->
