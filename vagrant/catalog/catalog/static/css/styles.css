@@ -82,7 +82,16 @@ h1 {
 /* Style card for Google login card */
 .zooma-card-login-g > .mdl-card__title {
     background: #EF5350;
+}
 
+.google-login-button {
+    color: white;
+    background: #EF5350;
+}
+
+.google-login-button:hover {
+    color: white;
+    background: rgb(243, 149, 147);
 }
 
 /* Style card for Facebook login card*/
